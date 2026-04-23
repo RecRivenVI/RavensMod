@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ravensmod:block/mirror_block"
+    }
+  }
+}
