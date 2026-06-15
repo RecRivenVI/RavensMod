@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "ravensmod:block/mirror_block"
+    "all": "ravensmod:block/mirror_block",
+    "particle": "ravensmod:block/mirror_block"
   }
 }

@@ -3,6 +3,7 @@ package com.recrivenvi.ravensmod.client;
 import com.recrivenvi.ravensmod.compat.CompatBlockEntitiesModels;
 import com.recrivenvi.ravensmod.compat.CompatBlockEntitiesRenderer;
 import com.recrivenvi.ravensmod.compat.CompatBlockItem;
+import com.recrivenvi.ravensmod.compat.CompatBlockItemRenderProvider;
 import com.recrivenvi.ravensmod.register.BlocksX;
 import com.recrivenvi.ravensmod.utils.RegisterBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
@@ -11,31 +12,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 public class RavensModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // Register GeckoLib models for item rendering
-        CompatBlockItem.registerModel(BlocksX.BLOCK_ENTITY_1, "shattered_throne", "mirror_block", null);
-        CompatBlockItem.registerModel(BlocksX.BLOCK_ENTITY_2, "round_corner_1", "white_block", null);
-        CompatBlockItem.registerModel(BlocksX.BLOCK_ENTITY_3, "round_corner_2", "white_block", null);
-        CompatBlockItem.registerModel(BlocksX.BLOCK_ENTITY_4, "ball", "white_block", null);
-        CompatBlockItem.registerModel(BlocksX.BLOCK_ENTITY_5, "ball_2", "white_block", null);
-
-        //? <26.1 {
-        /*// GeckoLib 4: register GeoItemRenderer factories for each block entity item
-        CompatBlockItem.registerRendererFactory(BlocksX.BLOCK_ENTITY_1, () ->
-            new software.bernie.geckolib.renderer.GeoItemRenderer<>(
-                new CompatBlockEntitiesModels<>("shattered_throne", "mirror_block", null)));
-        CompatBlockItem.registerRendererFactory(BlocksX.BLOCK_ENTITY_2, () ->
-            new software.bernie.geckolib.renderer.GeoItemRenderer<>(
-                new CompatBlockEntitiesModels<>("round_corner_1", "white_block", null)));
-        CompatBlockItem.registerRendererFactory(BlocksX.BLOCK_ENTITY_3, () ->
-            new software.bernie.geckolib.renderer.GeoItemRenderer<>(
-                new CompatBlockEntitiesModels<>("round_corner_2", "white_block", null)));
-        CompatBlockItem.registerRendererFactory(BlocksX.BLOCK_ENTITY_4, () ->
-            new software.bernie.geckolib.renderer.GeoItemRenderer<>(
-                new CompatBlockEntitiesModels<>("ball", "white_block", null)));
-        CompatBlockItem.registerRendererFactory(BlocksX.BLOCK_ENTITY_5, () ->
-            new software.bernie.geckolib.renderer.GeoItemRenderer<>(
-                new CompatBlockEntitiesModels<>("ball_2", "white_block", null)));*/
-        //?}
+        CompatBlockItem.registerRenderProvider(BlocksX.BLOCK_ENTITY_1, new CompatBlockItemRenderProvider("shattered_throne", "mirror_block", null));
+        CompatBlockItem.registerRenderProvider(BlocksX.BLOCK_ENTITY_2, new CompatBlockItemRenderProvider("round_corner_1", "white_block", null));
+        CompatBlockItem.registerRenderProvider(BlocksX.BLOCK_ENTITY_3, new CompatBlockItemRenderProvider("round_corner_2", "white_block", null));
+        CompatBlockItem.registerRenderProvider(BlocksX.BLOCK_ENTITY_4, new CompatBlockItemRenderProvider("ball", "white_block", null));
+        CompatBlockItem.registerRenderProvider(BlocksX.BLOCK_ENTITY_5, new CompatBlockItemRenderProvider("ball_2", "white_block", null));
 
         //? >=26.1 {
         BlockEntityRenderers.register(RegisterBlockEntities.BLOCK_ENTITY_1, ctx -> new CompatBlockEntitiesRenderer<>(ctx, new CompatBlockEntitiesModels<>("shattered_throne", "mirror_block", null)));

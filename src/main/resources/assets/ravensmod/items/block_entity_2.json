@@ -1,6 +1,9 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "ravensmod:item/block_entity_2"
+    "type": "minecraft:special",
+    "base": "ravensmod:item/block_entity_2",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
   }
 }

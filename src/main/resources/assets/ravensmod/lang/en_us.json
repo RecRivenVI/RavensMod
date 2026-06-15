@@ -1,11 +1,18 @@
 {
   "itemGroup.ravensmod": "RavenYin's Mod",
   "item.ravensmod.recriven_vi": "RavenYin's avatar",
+  "block.ravensmod.mirror_block": "Mirror Block",
+  "block.ravensmod.white_block": "White Block",
   "item.ravensmod.mirror_block": "Mirror Block",
   "item.ravensmod.white_block": "White Block",
   "block.ravensmod.block_entity_1": "Shattered Throne",
   "block.ravensmod.block_entity_2": "Round Corner 1",
   "block.ravensmod.block_entity_3": "Round Corner 2",
   "block.ravensmod.block_entity_4": "Ball",
-  "block.ravensmod.block_entity_5": "Ball 2"
+  "block.ravensmod.block_entity_5": "Ball 2",
+  "item.ravensmod.block_entity_1": "Shattered Throne",
+  "item.ravensmod.block_entity_2": "Round Corner 1",
+  "item.ravensmod.block_entity_3": "Round Corner 2",
+  "item.ravensmod.block_entity_4": "Ball",
+  "item.ravensmod.block_entity_5": "Ball 2"
 }

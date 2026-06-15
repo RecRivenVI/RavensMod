@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:air",
+  "parent": "minecraft:block/cube_all",
   "textures": {
+    "all": "ravensmod:block/white_block",
     "particle": "ravensmod:block/white_block"
   }
 }
