@@ -23,10 +23,8 @@ jobs:
         with:
           name: ravensmod-1.21.4
           path: versions/1.21.4/build/libs/*.jar
-          compression-level: 0
       - name: upload 26.1.2
         uses: actions/upload-artifact@v5
         with:
           name: ravensmod-26.1.2
           path: versions/26.1.2/build/libs/*.jar
-          compression-level: 0
