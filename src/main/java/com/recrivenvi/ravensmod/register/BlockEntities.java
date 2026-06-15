@@ -1,7 +1,10 @@
 package com.recrivenvi.ravensmod.register;
 
+//? >=26.1 {
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+//?}
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -27,12 +30,14 @@ public class BlockEntities<E extends BlockEntity> extends BaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
+    //? >=26.1 {
     @Override
     protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return RecordCodecBuilder.mapCodec(instance ->
                 instance.group(propertiesCodec()).apply(instance, (props) -> new BlockEntities<>(props, this.entityFactory))
         );
     }
+    //?}
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
