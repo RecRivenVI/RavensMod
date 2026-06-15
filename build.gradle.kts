@@ -109,6 +109,6 @@ tasks.jar {
 tasks.register<Copy>("buildAndCollect") {
     group = "build"
     from(tasks.jar)
-    into(rootProject.layout.buildDirectory.file("libs/${property("mod_version")}"))
+    into(rootProject.layout.buildDirectory.dir("libs"))
     dependsOn("build")
 }
