@@ -71,7 +71,7 @@ public class BlocksX {
     public static final Block BLOCK_ENTITY_1 = register("block_entity_1", settings -> new BlockEntities<>(settings, BlockEntity1Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
     public static final Block BLOCK_ENTITY_2 = register("block_entity_2", settings -> new BlockEntities<>(settings, BlockEntity2Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
     public static final Block BLOCK_ENTITY_3 = register("block_entity_3", settings -> new BlockEntities<>(settings, BlockEntity3Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
-    public static final Block BLOCK_ENTITY_4 = register("block_entity_4", settings -> new BlockEntities<>(settings, BlockEntity4Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
+    public static final Block BLOCK_ENTITY_4 = register("block_entity_4", settings -> new VerticalBlockEntities<>(settings, BlockEntity4Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
     public static final Block BLOCK_ENTITY_5 = register("block_entity_5", settings -> new BlockEntities<>(settings, BlockEntity5Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
 
     public static void initialize() {

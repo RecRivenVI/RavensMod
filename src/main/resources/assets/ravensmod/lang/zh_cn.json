@@ -8,11 +8,11 @@
   "block.ravensmod.block_entity_1": "破碎王座",
   "block.ravensmod.block_entity_2": "圆角方块 1",
   "block.ravensmod.block_entity_3": "圆角方块 2",
-  "block.ravensmod.block_entity_4": "球体",
-  "block.ravensmod.block_entity_5": "球体 2",
+  "block.ravensmod.block_entity_4": "平墙",
+  "block.ravensmod.block_entity_5": "竖墙",
   "item.ravensmod.block_entity_1": "破碎王座",
   "item.ravensmod.block_entity_2": "圆角方块 1",
   "item.ravensmod.block_entity_3": "圆角方块 2",
-  "item.ravensmod.block_entity_4": "球体",
-  "item.ravensmod.block_entity_5": "球体 2"
+  "item.ravensmod.block_entity_4": "平墙",
+  "item.ravensmod.block_entity_5": "竖墙"
 }
