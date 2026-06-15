@@ -1,9 +1,26 @@
+buildscript {
+    repositories {
+        maven("https://maven.fabricmc.net/")
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("net.fabricmc:fabric-loom:1.17.11")
+    }
+}
+
 plugins {
-    id("net.fabricmc.fabric-loom") version "1.17.11"
+    id("dev.kikugie.stonecutter")
+}
+
+if (sc.current.parsed >= "26.1") {
+    apply(plugin = "net.fabricmc.fabric-loom")
+} else {
+    apply(plugin = "net.fabricmc.fabric-loom-remap")
 }
 
 version = "${property("mod_version")}${sc.current.version}"
-base.archivesName = property("mod_id") as String
+base.archivesName.set(property("mod_id") as String)
 
 val requiredJava: JavaVersion = when {
     sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
@@ -25,34 +42,39 @@ repositories {
     }
 }
 
-loom {
-    splitEnvironmentSourceSets()
+val loom = the<net.fabricmc.loom.api.LoomGradleExtensionAPI>()
 
-    mods {
-        "ravensmod" {
-            sourceSet(sourceSets.main)
-            sourceSet(sourceSets.client)
-        }
-    }
+loom.splitEnvironmentSourceSets()
+
+loom.mods.create("ravensmod") {
+    sourceSet(sourceSets.getByName("main"))
+    sourceSet(sourceSets.getByName("client"))
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${sc.current.version}")
-    loom.applyMappings()
+    "minecraft"("com.mojang:minecraft:${sc.current.version}")
+    if (sc.current.parsed < "26.1") {
+        "mappings"(loom.officialMojangMappings())
+    }
 
-    val loaderVersion: String by project
-    val fabricApiVersion: String by project
+    val loaderVersion = property("loader_version") as String
+    val fabricApiVersion = property("fabric_api_version") as String
+    val geckolibVersion = property("geckolib_version") as String
+    val geckolibGroup = property("geckolib_group") as String
+    val geckolibArtifact = property("geckolib_artifact") as String
 
-    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-
-    val geckolibVersion: String by project
-    val geckolibGroup: String by project
-    val geckolibArtifact: String by project
-    modImplementation("$geckolibGroup:$geckolibArtifact:$geckolibVersion")
+    if (sc.current.parsed >= "26.1") {
+        "implementation"("net.fabricmc:fabric-loader:$loaderVersion")
+        "implementation"("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+        "implementation"("$geckolibGroup:$geckolibArtifact:$geckolibVersion")
+    } else {
+        "modImplementation"("net.fabricmc:fabric-loader:$loaderVersion")
+        "modImplementation"("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+        "modImplementation"("$geckolibGroup:$geckolibArtifact:$geckolibVersion")
+    }
 }
 
-processResources {
+tasks.processResources {
     inputs.property("version", project.version)
     inputs.property("mc_version", sc.current.version)
 
@@ -60,7 +82,7 @@ processResources {
         expand(
             "version" to project.version.toString(),
             "mc_version" to sc.current.version,
-            "loader_version" to (property("loader_version") as String)
+            "loader_version" to project.property("loader_version") as String
         )
     }
 }
@@ -70,16 +92,16 @@ java {
     sourceCompatibility = requiredJava
     targetCompatibility = requiredJava
     toolchain {
-        vendor = JvmVendorSpec.BELLSOFT
-        languageVersion = JavaLanguageVersion.of(requiredJava.majorVersion)
+        vendor.set(JvmVendorSpec.BELLSOFT)
+        languageVersion.set(JavaLanguageVersion.of(requiredJava.majorVersion))
     }
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.release = requiredJava.majorVersion.toInt()
+    options.release.set(requiredJava.majorVersion.toInt())
 }
 
-jar {
+tasks.jar {
     from("LICENSE") {
         rename { "${it}_${project.name}" }
     }
@@ -87,7 +109,7 @@ jar {
 
 tasks.register<Copy>("buildAndCollect") {
     group = "build"
-    from(tasks.named("jar"))
+    from(tasks.jar)
     into(rootProject.layout.buildDirectory.file("libs/${property("mod_version")}"))
     dependsOn("build")
 }
