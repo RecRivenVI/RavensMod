@@ -1,36 +1,36 @@
 package com.recrivenvi.ravensmod.client;
 
 import com.recrivenvi.ravensmod.RavensMod;
-import net.minecraft.resources.ResourceLocation;
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoRenderer;
 
 public class BlockEntitiesModels<T extends BlockEntity & GeoAnimatable> extends GeoModel<T> {
-    private final ResourceLocation model;
-    private final ResourceLocation texture;
-    private final @Nullable ResourceLocation animations;
+    private final Identifier model;
+    private final Identifier texture;
+    private final @Nullable Identifier animations;
 
     public BlockEntitiesModels(String modelPath, String texturePath, @Nullable String animPath) {
-        this.model = ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, "geo/" + modelPath + ".geo.json");
-        this.texture = ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, "textures/block/" + texturePath + ".png");
-        this.animations = animPath != null ? ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, "animations/" + animPath + ".animation.json") : null;
+        this.model = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, modelPath);
+        this.texture = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, "textures/block/" + texturePath + ".png");
+        this.animations = animPath != null ? Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, animPath) : null;
     }
 
     @Override
-    public ResourceLocation getModelResource(T animatable, @Nullable GeoRenderer<T> renderer) {
+    public Identifier getModelResource(GeoRenderState renderState) {
         return this.model;
     }
 
     @Override
-    public ResourceLocation getTextureResource(T animatable, @Nullable GeoRenderer<T> renderer) {
+    public Identifier getTextureResource(GeoRenderState renderState) {
         return this.texture;
     }
 
     @Override
-    public ResourceLocation getAnimationResource(T animatable) {
+    public Identifier getAnimationResource(T animatable) {
         return this.animations;
     }
 }

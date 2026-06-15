@@ -1,12 +1,12 @@
 package com.recrivenvi.ravensmod.register;
 
 import com.recrivenvi.ravensmod.RavensMod;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -29,11 +29,11 @@ public class BlocksX {
     }
 
     public static ResourceKey<Block> keyOfBlock(String name) {
-        return ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, name));
+        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, name));
     }
 
     public static ResourceKey<Item> keyOfItem(String name) {
-        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, name));
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, name));
     }
 
     public static final Block MIRROR_BLOCK = register("mirror_block", Block::new, BlockBehaviour.Properties.of().sound(SoundType.GLASS), true);
@@ -45,7 +45,7 @@ public class BlocksX {
     public static final Block BLOCK_ENTITY_5 = register("block_entity_5", settings -> new BlockEntities<>(settings, BlockEntity5Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
 
     public static void initialize() {
-        ItemGroupEvents.modifyEntriesEvent(TabsX.CUSTOM_ITEM_GROUP_KEY).register((itemGroup) -> {
+        CreativeModeTabEvents.modifyOutputEvent(TabsX.CUSTOM_ITEM_GROUP_KEY).register((itemGroup) -> {
             itemGroup.accept(BlocksX.MIRROR_BLOCK.asItem());
             itemGroup.accept(BlocksX.WHITE_BLOCK.asItem());
             itemGroup.accept(BlocksX.BLOCK_ENTITY_1.asItem());
