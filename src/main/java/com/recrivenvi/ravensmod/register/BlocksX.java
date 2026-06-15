@@ -1,6 +1,7 @@
 package com.recrivenvi.ravensmod.register;
 
 import com.recrivenvi.ravensmod.RavensMod;
+import com.recrivenvi.ravensmod.compat.CompatBlockItem;
 //? >=26.1 {
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.resources.Identifier;
@@ -29,7 +30,7 @@ public class BlocksX {
         Block block = blockFactory.apply(settings.setId(blockKey));
         if (shouldRegisterItem) {
             ResourceKey<Item> itemKey = keyOfItem(name);
-            BlockItem blockItem = new BlockItem(block, new Item.Properties().setId(itemKey));
+            CompatBlockItem blockItem = new CompatBlockItem(block, new Item.Properties().setId(itemKey));
             Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem);
         }
         return Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
@@ -40,7 +41,7 @@ public class BlocksX {
         if (shouldRegisterItem) {
             ResourceLocation itemId = keyOfItem(name);
             ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, itemId);
-            BlockItem blockItem = new BlockItem(block, new Item.Properties().setId(itemKey));
+            CompatBlockItem blockItem = new CompatBlockItem(block, new Item.Properties().setId(itemKey));
             Registry.register(BuiltInRegistries.ITEM, itemId, blockItem);
         }
         return Registry.register(BuiltInRegistries.BLOCK, id, block);*/

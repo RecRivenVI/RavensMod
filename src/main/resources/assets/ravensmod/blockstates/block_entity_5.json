@@ -1,7 +1,8 @@
 {
   "variants": {
-    "": {
-      "model": "ravensmod:block/block_entity_5"
-    }
+    "facing=north": { "model": "ravensmod:block/block_entity_5" },
+    "facing=south": { "model": "ravensmod:block/block_entity_5", "y": 180 },
+    "facing=west": { "model": "ravensmod:block/block_entity_5", "y": 270 },
+    "facing=east": { "model": "ravensmod:block/block_entity_5", "y": 90 }
   }
 }

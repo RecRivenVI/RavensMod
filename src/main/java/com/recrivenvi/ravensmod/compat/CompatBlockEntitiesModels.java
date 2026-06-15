@@ -6,10 +6,17 @@ import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.model.GeoModel;
 import com.geckolib.renderer.base.GeoRenderState;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
+//?} else {
+/*import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoRenderer;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;*/
+//?}
 
-public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> extends GeoModel<T> {
+//? >=26.1 {
+public class CompatBlockEntitiesModels<T extends GeoAnimatable> extends GeoModel<T> {
     private final Identifier model;
     private final Identifier texture;
     private final @Nullable Identifier animations;
@@ -36,14 +43,7 @@ public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> ex
     }
 }
 //?} else {
-/*import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoRenderer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.Nullable;
-
-public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> extends GeoModel<T> {
+/*public class CompatBlockEntitiesModels<T extends GeoAnimatable> extends GeoModel<T> {
     private final ResourceLocation model;
     private final ResourceLocation texture;
     private final @Nullable ResourceLocation animations;
