@@ -7,7 +7,7 @@ import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.util.GeckoLibUtil;
 //?} else {
 /*import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;*/
 //?}
@@ -32,5 +32,10 @@ public abstract class CompatBlockEntitiesRegister extends BlockEntity implements
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+    }
+
+    @Override
+    public double getTick(Object entity) {
+        return 0;
     }
 }

@@ -20,7 +20,7 @@ public class TabsX {
     public static final ResourceKey<CreativeModeTab> CUSTOM_ITEM_GROUP_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, "item_group"));
     public static final CreativeModeTab CUSTOM_ITEM_GROUP = FabricCreativeModeTab.builder().icon(() -> new ItemStack(ItemsX.RECRIVEN_VI)).title(Component.translatable("itemGroup.ravensmod")).build();
     //?} else {
-    /*public static final ResourceKey<CreativeModeTab> CUSTOM_ITEM_GROUP_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), new ResourceLocation(RavensMod.MOD_ID, "item_group"));
+    /*public static final ResourceKey<CreativeModeTab> CUSTOM_ITEM_GROUP_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, "item_group"));
     public static final CreativeModeTab CUSTOM_ITEM_GROUP = FabricItemGroup.builder().icon(() -> new ItemStack(ItemsX.RECRIVEN_VI)).title(Component.translatable("itemGroup.ravensmod")).build();*/
     //?}
 }

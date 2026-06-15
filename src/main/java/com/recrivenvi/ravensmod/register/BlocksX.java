@@ -35,10 +35,12 @@ public class BlocksX {
         return Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
         //?} else {
         /*ResourceLocation id = keyOfBlock(name);
-        Block block = blockFactory.apply(settings);
+        ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
+        Block block = blockFactory.apply(settings.setId(blockKey));
         if (shouldRegisterItem) {
             ResourceLocation itemId = keyOfItem(name);
-            BlockItem blockItem = new BlockItem(block, new Item.Properties());
+            ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, itemId);
+            BlockItem blockItem = new BlockItem(block, new Item.Properties().setId(itemKey));
             Registry.register(BuiltInRegistries.ITEM, itemId, blockItem);
         }
         return Registry.register(BuiltInRegistries.BLOCK, id, block);*/
@@ -55,11 +57,11 @@ public class BlocksX {
     }
     //?} else {
     /*public static ResourceLocation keyOfBlock(String name) {
-        return new ResourceLocation(RavensMod.MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, name);
     }
 
     public static ResourceLocation keyOfItem(String name) {
-        return new ResourceLocation(RavensMod.MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, name);
     }*/
     //?}
 
@@ -84,13 +86,13 @@ public class BlocksX {
         });
         //?} else {
         /*ItemGroupEvents.modifyEntriesEvent(TabsX.CUSTOM_ITEM_GROUP_KEY).register(entries -> {
-            entries.add(BlocksX.MIRROR_BLOCK.asItem());
-            entries.add(BlocksX.WHITE_BLOCK.asItem());
-            entries.add(BlocksX.BLOCK_ENTITY_1.asItem());
-            entries.add(BlocksX.BLOCK_ENTITY_2.asItem());
-            entries.add(BlocksX.BLOCK_ENTITY_3.asItem());
-            entries.add(BlocksX.BLOCK_ENTITY_4.asItem());
-            entries.add(BlocksX.BLOCK_ENTITY_5.asItem());
+            entries.accept(BlocksX.MIRROR_BLOCK.asItem());
+            entries.accept(BlocksX.WHITE_BLOCK.asItem());
+            entries.accept(BlocksX.BLOCK_ENTITY_1.asItem());
+            entries.accept(BlocksX.BLOCK_ENTITY_2.asItem());
+            entries.accept(BlocksX.BLOCK_ENTITY_3.asItem());
+            entries.accept(BlocksX.BLOCK_ENTITY_4.asItem());
+            entries.accept(BlocksX.BLOCK_ENTITY_5.asItem());
         });*/
         //?}
     }

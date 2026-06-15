@@ -15,7 +15,7 @@ public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> ex
     private final @Nullable Identifier animations;
 
     public CompatBlockEntitiesModels(String modelPath, String texturePath, @Nullable String animPath) {
-        this.model = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, modelPath);
+        this.model = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, "geo/" + modelPath + ".geo.json");
         this.texture = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, "textures/block/" + texturePath + ".png");
         this.animations = animPath != null ? Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, animPath) : null;
     }
@@ -37,29 +37,30 @@ public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> ex
 }
 //?} else {
 /*import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> extends AnimatedGeoModel<T> {
+public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> extends GeoModel<T> {
     private final ResourceLocation model;
     private final ResourceLocation texture;
     private final @Nullable ResourceLocation animations;
 
     public CompatBlockEntitiesModels(String modelPath, String texturePath, @Nullable String animPath) {
-        this.model = new ResourceLocation(RavensMod.MOD_ID, "geo/" + modelPath + ".geo.json");
-        this.texture = new ResourceLocation(RavensMod.MOD_ID, "textures/block/" + texturePath + ".png");
-        this.animations = animPath != null ? new ResourceLocation(RavensMod.MOD_ID, "animations/" + animPath + ".animation.json") : null;
+        this.model = ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, "geo/" + modelPath + ".geo.json");
+        this.texture = ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, "textures/block/" + texturePath + ".png");
+        this.animations = animPath != null ? ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, "animations/" + animPath + ".animation.json") : null;
     }
 
     @Override
-    public ResourceLocation getModelResource(T animatable) {
+    public ResourceLocation getModelResource(T animatable, GeoRenderer<T> renderer) {
         return this.model;
     }
 
     @Override
-    public ResourceLocation getTextureResource(T animatable) {
+    public ResourceLocation getTextureResource(T animatable, GeoRenderer<T> renderer) {
         return this.texture;
     }
 

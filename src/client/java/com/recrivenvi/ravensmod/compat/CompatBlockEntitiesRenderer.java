@@ -15,14 +15,13 @@ public class CompatBlockEntitiesRenderer<T extends BlockEntity & GeoAnimatable, 
 }
 //?} else {
 /*import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class CompatBlockEntitiesRenderer<T extends BlockEntity & GeoAnimatable> extends GeoBlockRenderer<T> {
-    public CompatBlockEntitiesRenderer(BlockEntityRendererProvider.Context context, AnimatedGeoModel<T> model) {
-        super(context, model);
+    public CompatBlockEntitiesRenderer(GeoModel<T> model) {
+        super(model);
     }
 }*/
 //?}

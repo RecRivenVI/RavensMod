@@ -27,8 +27,9 @@ public class ItemsX {
         Item item = itemFactory.apply(settings.setId(itemKey));
         Registry.register(BuiltInRegistries.ITEM, itemKey, item);
         //?} else {
-        /*ResourceLocation id = new ResourceLocation(RavensMod.MOD_ID, name);
-        Item item = itemFactory.apply(settings);
+        /*ResourceLocation id = ResourceLocation.fromNamespaceAndPath(RavensMod.MOD_ID, name);
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
+        Item item = itemFactory.apply(settings.setId(itemKey));
         Registry.register(BuiltInRegistries.ITEM, id, item);*/
         //?}
         return item;
@@ -43,7 +44,7 @@ public class ItemsX {
         });
         //?} else {
         /*ItemGroupEvents.modifyEntriesEvent(CUSTOM_ITEM_GROUP_KEY).register(entries -> {
-            entries.add(ItemsX.RECRIVEN_VI);
+            entries.accept(ItemsX.RECRIVEN_VI);
         });*/
         //?}
     }
