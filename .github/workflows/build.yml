@@ -1,9 +1,6 @@
 name: build
 on: [ pull_request, push ]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -22,12 +19,12 @@ jobs:
       - name: build
         run: ./gradlew build
       - name: upload 1.21.4
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: ravensmod-1.21.4
           path: versions/1.21.4/build/libs/*.jar
       - name: upload 26.1.2
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: ravensmod-26.1.2
           path: versions/26.1.2/build/libs/*.jar
