@@ -19,7 +19,7 @@ if (sc.current.parsed >= "26.1") {
     apply(plugin = "net.fabricmc.fabric-loom-remap")
 }
 
-version = "${property("mod_version")}${sc.current.version}"
+version = "${property("mod_version")}+${sc.current.version}"
 base.archivesName.set(property("mod_id") as String)
 
 val requiredJava: JavaVersion = when {
