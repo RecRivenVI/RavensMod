@@ -15,7 +15,7 @@ public class CompatBlockEntitiesModels<T extends BlockEntity & GeoAnimatable> ex
     private final @Nullable Identifier animations;
 
     public CompatBlockEntitiesModels(String modelPath, String texturePath, @Nullable String animPath) {
-        this.model = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, "geo/" + modelPath + ".geo.json");
+        this.model = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, modelPath);
         this.texture = Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, "textures/block/" + texturePath + ".png");
         this.animations = animPath != null ? Identifier.fromNamespaceAndPath(RavensMod.MOD_ID, animPath) : null;
     }

@@ -34,8 +34,10 @@ public abstract class CompatBlockEntitiesRegister extends BlockEntity implements
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
     }
 
-    @Override
+    //? <26.1 {
+    /*@Override
     public double getTick(Object entity) {
         return 0;
-    }
+    }*/
+    //?}
 }
