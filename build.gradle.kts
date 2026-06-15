@@ -92,7 +92,6 @@ java {
     sourceCompatibility = requiredJava
     targetCompatibility = requiredJava
     toolchain {
-        vendor.set(JvmVendorSpec.BELLSOFT)
         languageVersion.set(JavaLanguageVersion.of(requiredJava.majorVersion))
     }
 }
