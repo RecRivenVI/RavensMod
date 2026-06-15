@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:air",
   "textures": {
-    "particle": "ravensmod:block/mirror_block"
+    "particle": "ravensmod:block/white_block"
   }
 }
