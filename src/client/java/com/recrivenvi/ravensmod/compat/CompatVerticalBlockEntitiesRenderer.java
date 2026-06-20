@@ -16,8 +16,9 @@ public class CompatVerticalBlockEntitiesRenderer<T extends BlockEntity & GeoAnim
     }
 
     @Override
-    protected void tryRotateByBlockstate(RenderPassInfo<R> renderPass, PoseStack poseStack) {
-        Direction facing = renderPass.getOrDefaultGeckolibData(DIRECTION_FACING, Direction.DOWN);
+    @SuppressWarnings("rawtypes")
+    protected void tryRotateByBlockstate(RenderPassInfo renderPass, PoseStack poseStack) {
+        Direction facing = (Direction) renderPass.getOrDefaultGeckolibData(DIRECTION_FACING, Direction.DOWN);
         rotateDownBasedAroundGeoCenter(facing, poseStack);
     }
 }

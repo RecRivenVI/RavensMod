@@ -18,13 +18,23 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - name: upload 1.21.4
+      - name: upload fabric 1.21.4
         uses: actions/upload-artifact@v4
         with:
-          name: ravensmod-1.21.4
-          path: versions/1.21.4/build/libs/*.jar
-      - name: upload 26.2
+          name: ravensmod-fabric-1.21.4
+          path: versions/fabric-1.21.4/build/libs/*.jar
+      - name: upload fabric 26.2
         uses: actions/upload-artifact@v4
         with:
-          name: ravensmod-26.2
-          path: versions/26.2/build/libs/*.jar
+          name: ravensmod-fabric-26.2
+          path: versions/fabric-26.2/build/libs/*.jar
+      - name: upload neoforge 1.21.4
+        uses: actions/upload-artifact@v4
+        with:
+          name: ravensmod-neoforge-1.21.4
+          path: versions/neoforge-1.21.4/build/libs/*.jar
+      - name: upload neoforge 26.2
+        uses: actions/upload-artifact@v4
+        with:
+          name: ravensmod-neoforge-26.2
+          path: versions/neoforge-26.2/build/libs/*.jar

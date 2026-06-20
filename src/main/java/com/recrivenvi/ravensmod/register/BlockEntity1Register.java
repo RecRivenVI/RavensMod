@@ -7,6 +7,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntity1Register extends CompatBlockEntitiesRegister {
     public BlockEntity1Register(BlockPos pos, BlockState state) {
+        //? neoforge {
+        /*super(RegisterBlockEntities.BLOCK_ENTITY_1.get(), pos, state);*/
+        //?} else {
         super(RegisterBlockEntities.BLOCK_ENTITY_1, pos, state);
+        //?}
     }
 }

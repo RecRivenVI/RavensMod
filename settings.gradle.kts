@@ -4,6 +4,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.fabricmc.net/")
+        maven("https://maven.neoforged.net/releases")
         maven("https://maven.kikugie.dev/releases") { name = "KikuGie Releases" }
         maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie Snapshots" }
     }
@@ -16,8 +17,13 @@ plugins {
 
 stonecutter {
     create(rootProject) {
-        versions("1.21.4", "26.2")
-        vcsVersion = "26.2"
+        versions(mapOf(
+            "fabric-1.21.4" to "1.21.4",
+            "fabric-26.2" to "26.2",
+            "neoforge-1.21.4" to "1.21.4",
+            "neoforge-26.2" to "26.2",
+        ))
+        vcsVersion = "fabric-26.2"
     }
 }
 

@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.recrivenvi.ravensmod.RavensMod"
+      "com.recrivenvi.ravensmod.fabric.FabricRavensMod"
     ],
     "client": [
-      "com.recrivenvi.ravensmod.client.RavensModClient"
+      "com.recrivenvi.ravensmod.client.fabric.FabricRavensModClient"
     ]
   },
   "mixins": [

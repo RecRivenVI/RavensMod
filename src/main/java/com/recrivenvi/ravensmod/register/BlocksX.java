@@ -3,11 +3,9 @@ package com.recrivenvi.ravensmod.register;
 import com.recrivenvi.ravensmod.RavensMod;
 import com.recrivenvi.ravensmod.compat.CompatBlockItem;
 //? >=26.1 {
-import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.resources.Identifier;
 //?} else {
-/*import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.resources.ResourceLocation;*/
+/*import net.minecraft.resources.ResourceLocation;*/
 //?}
 
 import net.minecraft.core.Registry;
@@ -19,11 +17,30 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+//? neoforge {
+/*import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredRegister;*/
+//?}
 
 import java.util.function.Function;
 
 
 public class BlocksX {
+    //? neoforge {
+    /*public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(RavensMod.MOD_ID);
+
+    public static <T extends Block> DeferredBlock<T> register(String name, Function<BlockBehaviour.Properties, T> blockFactory, BlockBehaviour.Properties settings, boolean shouldRegisterItem) {
+        //? >=26.1 {
+        DeferredBlock<T> block = BLOCKS.registerBlock(name, blockFactory, () -> settings);
+        //?} else {
+        DeferredBlock<T> block = BLOCKS.registerBlock(name, blockFactory, settings);
+        //?}
+        if (shouldRegisterItem) {
+            ItemsX.ITEMS.registerItem(name, properties -> new CompatBlockItem(block.get(), properties));
+        }
+        return block;
+    }*/
+    //?} else {
     public static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties settings, boolean shouldRegisterItem) {
         //? >=26.1 {
         ResourceKey<Block> blockKey = keyOfBlock(name);
@@ -47,6 +64,7 @@ public class BlocksX {
         return Registry.register(BuiltInRegistries.BLOCK, id, block);*/
         //?}
     }
+    //?}
 
     //? >=26.1 {
     public static ResourceKey<Block> keyOfBlock(String name) {
@@ -66,6 +84,15 @@ public class BlocksX {
     }*/
     //?}
 
+    //? neoforge {
+    /*public static final DeferredBlock<Block> MIRROR_BLOCK = register("mirror_block", Block::new, BlockBehaviour.Properties.of().sound(SoundType.GLASS), true);
+    public static final DeferredBlock<Block> WHITE_BLOCK = register("white_block", Block::new, BlockBehaviour.Properties.of().sound(SoundType.STONE), true);
+    public static final DeferredBlock<BlockEntities<BlockEntity1Register>> BLOCK_ENTITY_1 = register("block_entity_1", settings -> new BlockEntities<>(settings, BlockEntity1Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
+    public static final DeferredBlock<BlockEntities<BlockEntity2Register>> BLOCK_ENTITY_2 = register("block_entity_2", settings -> new BlockEntities<>(settings, BlockEntity2Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
+    public static final DeferredBlock<BlockEntities<BlockEntity3Register>> BLOCK_ENTITY_3 = register("block_entity_3", settings -> new BlockEntities<>(settings, BlockEntity3Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
+    public static final DeferredBlock<VerticalBlockEntities<BlockEntity4Register>> BLOCK_ENTITY_4 = register("block_entity_4", settings -> new VerticalBlockEntities<>(settings, BlockEntity4Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
+    public static final DeferredBlock<BlockEntities<BlockEntity5Register>> BLOCK_ENTITY_5 = register("block_entity_5", settings -> new BlockEntities<>(settings, BlockEntity5Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);*/
+    //?} else {
     public static final Block MIRROR_BLOCK = register("mirror_block", Block::new, BlockBehaviour.Properties.of().sound(SoundType.GLASS), true);
     public static final Block WHITE_BLOCK = register("white_block", Block::new, BlockBehaviour.Properties.of().sound(SoundType.STONE), true);
     public static final Block BLOCK_ENTITY_1 = register("block_entity_1", settings -> new BlockEntities<>(settings, BlockEntity1Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
@@ -73,28 +100,8 @@ public class BlocksX {
     public static final Block BLOCK_ENTITY_3 = register("block_entity_3", settings -> new BlockEntities<>(settings, BlockEntity3Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
     public static final Block BLOCK_ENTITY_4 = register("block_entity_4", settings -> new VerticalBlockEntities<>(settings, BlockEntity4Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
     public static final Block BLOCK_ENTITY_5 = register("block_entity_5", settings -> new BlockEntities<>(settings, BlockEntity5Register::new), BlockBehaviour.Properties.of().sound(SoundType.STONE).noOcclusion(), true);
+    //?}
 
     public static void initialize() {
-        //? >=26.1 {
-        CreativeModeTabEvents.modifyOutputEvent(TabsX.CUSTOM_ITEM_GROUP_KEY).register((itemGroup) -> {
-            itemGroup.accept(BlocksX.MIRROR_BLOCK.asItem());
-            itemGroup.accept(BlocksX.WHITE_BLOCK.asItem());
-            itemGroup.accept(BlocksX.BLOCK_ENTITY_1.asItem());
-            itemGroup.accept(BlocksX.BLOCK_ENTITY_2.asItem());
-            itemGroup.accept(BlocksX.BLOCK_ENTITY_3.asItem());
-            itemGroup.accept(BlocksX.BLOCK_ENTITY_4.asItem());
-            itemGroup.accept(BlocksX.BLOCK_ENTITY_5.asItem());
-        });
-        //?} else {
-        /*ItemGroupEvents.modifyEntriesEvent(TabsX.CUSTOM_ITEM_GROUP_KEY).register(entries -> {
-            entries.accept(BlocksX.MIRROR_BLOCK.asItem());
-            entries.accept(BlocksX.WHITE_BLOCK.asItem());
-            entries.accept(BlocksX.BLOCK_ENTITY_1.asItem());
-            entries.accept(BlocksX.BLOCK_ENTITY_2.asItem());
-            entries.accept(BlocksX.BLOCK_ENTITY_3.asItem());
-            entries.accept(BlocksX.BLOCK_ENTITY_4.asItem());
-            entries.accept(BlocksX.BLOCK_ENTITY_5.asItem());
-        });*/
-        //?}
     }
 }

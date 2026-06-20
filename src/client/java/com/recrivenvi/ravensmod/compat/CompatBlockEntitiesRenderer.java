@@ -19,13 +19,15 @@ public class CompatBlockEntitiesRenderer<T extends BlockEntity & GeoAnimatable, 
     }
 
     @Override
-    public void preRenderPass(RenderPassInfo<R> renderPass, SubmitNodeCollector nodeCollector) {
+    @SuppressWarnings("rawtypes")
+    public void preRenderPass(RenderPassInfo renderPass, SubmitNodeCollector nodeCollector) {
         renderPass.poseStack().translate(0.5, 0, 0.5);
     }
 
     @Override
-    protected void tryRotateByBlockstate(RenderPassInfo<R> renderPass, PoseStack poseStack) {
-        Direction facing = renderPass.getOrDefaultGeckolibData(DIRECTION_FACING, Direction.NORTH);
+    @SuppressWarnings("rawtypes")
+    protected void tryRotateByBlockstate(RenderPassInfo renderPass, PoseStack poseStack) {
+        Direction facing = (Direction) renderPass.getOrDefaultGeckolibData(DIRECTION_FACING, Direction.NORTH);
         rotateNorthBasedAroundGeoCenter(facing, poseStack);
     }
 
