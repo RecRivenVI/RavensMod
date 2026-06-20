@@ -23,8 +23,8 @@ jobs:
         with:
           name: ravensmod-1.21.4
           path: versions/1.21.4/build/libs/*.jar
-      - name: upload 26.1.2
+      - name: upload 26.2
         uses: actions/upload-artifact@v4
         with:
-          name: ravensmod-26.1.2
-          path: versions/26.1.2/build/libs/*.jar
+          name: ravensmod-26.2
+          path: versions/26.2/build/libs/*.jar

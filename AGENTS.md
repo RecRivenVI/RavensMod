@@ -6,13 +6,13 @@ Fabric Minecraft 模组，使用 Stonecutter 支持多版本构建。模组 ID�
 
 支持版本：
 - **1.21.4** — GeckoLib 4.8.5，Java 21，remap 工作流
-- **26.1.2** — GeckoLib 5.5.1，Java 25，modern 非 remap 工作流
+- **26.2** — GeckoLib 5.5.2，Java 25，modern 非 remap 工作流
 
 ## 构建与验证
 
 ```bash
 ./gradlew build                    # 构建所有版本
-./gradlew :26.1.2:runClient        # 启动 26.1.2 客户端
+./gradlew :26.2:runClient          # 启动 26.2 客户端
 ./gradlew :1.21.4:runClient        # 启动 1.21.4 客户端
 ```
 
@@ -21,18 +21,18 @@ Fabric Minecraft 模组，使用 Stonecutter 支持多版本构建。模组 ID�
 Windows 启动方式：
 ```powershell
 $env:JAVA_HOME='C:\Program Files\BellSoft\LibericaJDK-21-Full'
-.\gradlew.bat :26.1.2:runClient --no-daemon
+.\gradlew.bat :26.2:runClient --no-daemon
 ```
 
 ## Stonecutter 多版本架构
 
 使用 Stonecutter 0.9.5 插件管理多版本。核心文件：
 
-- `settings.gradle.kts` — 定义版本列表 `versions("1.21.4", "26.1.2")`
-- `stonecutter.gradle.kts` — 活跃版本声明 `stonecutter active "26.1.2"`
+- `settings.gradle.kts` — 定义版本列表 `versions("1.21.4", "26.2")`
+- `stonecutter.gradle.kts` — 活跃版本声明 `stonecutter active "26.2"`
 - `build.gradle.kts` — 构建逻辑，用 `sc.current.parsed` 做版本判断
 - `versions/1.21.4/gradle.properties` — 1.21.4 版本属性
-- `versions/26.1.2/gradle.properties` — 26.1.2 版本属性
+- `versions/26.2/gradle.properties` — 26.2 版本属性
 
 切换活跃版本：修改 `stonecutter.gradle.kts` 中的 `stonecutter active` 行，然后运行 `./gradlew Set active project to <version>`。
 
@@ -40,7 +40,7 @@ $env:JAVA_HOME='C:\Program Files\BellSoft\LibericaJDK-21-Full'
 
 ### 构建配置差异（build.gradle.kts）
 
-| 项目 | 1.21.4 | 26.1.2 |
+| 项目 | 1.21.4 | 26.2 |
 |------|--------|--------|
 | Loom 插件 | `fabric-loom-remap` | `fabric-loom` |
 | Mappings | `loom.officialMojangMappings()` | 无 |
@@ -67,13 +67,13 @@ import net.minecraft.resources.Identifier;
 - `entries.accept()` vs `entries.accept()`（1.21.4 的 FabricItemGroupEntries 也用 accept）
 - `ResourceKey` + `setId()` 注册（两个版本都需要）
 - `BaseEntityBlock.codec()`（两个版本都需要实现）
-- `BlockEntityRenderState` 泛型参数（仅 26.1）
+- `BlockEntityRenderState` 泛型参数（仅 26.1+）
 
 ### GeckoLib v4 vs v5 差异（compat 适配层）
 
 GeckoLib 版本差异太大，用 `compat/` 包做适配：
 
-| 项目 | GeckoLib 4（1.21.4） | GeckoLib 5（26.1.2） |
+| 项目 | GeckoLib 4（1.21.4） | GeckoLib 5（26.2） |
 |------|---------------------|---------------------|
 | 包名 | `software.bernie.geckolib.*` | `com.geckolib.*` |
 | AnimatableManager | `software.bernie.geckolib.animation.AnimatableManager` | `com.geckolib.animatable.manager.AnimatableManager` |
@@ -125,12 +125,12 @@ src/client/java/com/recrivenvi/ravensmod/client/
 
 ## 依赖
 
-| 依赖 | 1.21.4 | 26.1.2 |
+| 依赖 | 1.21.4 | 26.2 |
 |------|--------|--------|
-| Minecraft | 1.21.4 | 26.1.2 |
+| Minecraft | 1.21.4 | 26.2 |
 | Fabric Loader | 0.16.14 | 0.19.3 |
-| Fabric API | 0.119.4+1.21.4 | 0.151.0+26.1.2 |
-| GeckoLib | 4.8.5（`software.bernie.geckolib`） | 5.5.1（`com.geckolib`） |
+| Fabric API | 0.119.4+1.21.4 | 0.152.2+26.2 |
+| GeckoLib | 4.8.5（`software.bernie.geckolib`） | 5.5.2（`com.geckolib`） |
 | Java | 21 | 25 |
 | Gradle | 9.5.1 | — |
 | Fabric Loom | 1.17.11 | — |
@@ -138,9 +138,9 @@ src/client/java/com/recrivenvi/ravensmod/client/
 
 ## 注意事项
 
-- **不要在 26.1.2 使用 `modImplementation`**，用 `implementation`
-- **不要在 26.1.2 使用 `mappings`**，非混淆版本不需要
-- **不要在 26.1.2 使用 `new ResourceLocation()`**，用 `Identifier.fromNamespaceAndPath()`
+- **不要在 26.2 使用 `modImplementation`**，用 `implementation`
+- **不要在 26.2 使用 `mappings`**，非混淆版本不需要
+- **不要在 26.2 使用 `new ResourceLocation()`**，用 `Identifier.fromNamespaceAndPath()`
 - **GeckoLib 4 模型必须在 `geo/` 目录**，GeckoLib 5 在 `geckolib/models/`
 - **`codec()` 方法两个版本都要实现**，否则 1.21.4 报抽象方法未实现
 - **`setId()` 两个版本都需要**，否则报 "Block id not set"
