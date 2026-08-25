@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ravensmodels:block/white_block"
+    }
+  }
+}

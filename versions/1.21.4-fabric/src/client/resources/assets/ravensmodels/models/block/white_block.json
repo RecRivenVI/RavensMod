@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "ravensmodels:block/white_block",
+    "particle": "ravensmodels:block/white_block"
+  }
+}

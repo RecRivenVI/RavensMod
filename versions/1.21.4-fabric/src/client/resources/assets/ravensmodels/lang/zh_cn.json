@@ -1,0 +1,17 @@
+{
+  "itemGroup.ravensmodels": "Raven's Models",
+  "block.ravensmodels.mirror_block": "镜面方块",
+  "block.ravensmodels.white_block": "白色方块",
+  "item.ravensmodels.mirror_block": "镜面方块",
+  "item.ravensmodels.white_block": "白色方块",
+  "block.ravensmodels.shattered_throne": "破碎王座",
+  "block.ravensmodels.lower_round_corner": "下圆角",
+  "block.ravensmodels.upper_round_corner": "上圆角",
+  "block.ravensmodels.flat_wall": "平墙",
+  "block.ravensmodels.vertical_wall": "竖墙",
+  "item.ravensmodels.shattered_throne": "破碎王座",
+  "item.ravensmodels.lower_round_corner": "下圆角",
+  "item.ravensmodels.upper_round_corner": "上圆角",
+  "item.ravensmodels.flat_wall": "平墙",
+  "item.ravensmodels.vertical_wall": "竖墙"
+}

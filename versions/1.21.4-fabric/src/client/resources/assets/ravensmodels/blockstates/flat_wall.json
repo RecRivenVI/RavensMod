@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=down": { "model": "ravensmodels:block/flat_wall" },
+    "facing=up": { "model": "ravensmodels:block/flat_wall", "x": 180 },
+    "facing=north": { "model": "ravensmodels:block/flat_wall" },
+    "facing=south": { "model": "ravensmodels:block/flat_wall" },
+    "facing=east": { "model": "ravensmodels:block/flat_wall" },
+    "facing=west": { "model": "ravensmodels:block/flat_wall" }
+  }
+}

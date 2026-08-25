@@ -1,9 +1,0 @@
-{
-  "model": {
-    "type": "minecraft:special",
-    "base": "ravensmod:item/block_entity_3",
-    "model": {
-      "type": "geckolib:geckolib"
-    }
-  }
-}

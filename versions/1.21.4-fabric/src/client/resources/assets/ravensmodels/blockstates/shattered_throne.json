@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "ravensmodels:block/shattered_throne" },
+    "facing=south": { "model": "ravensmodels:block/shattered_throne", "y": 180 },
+    "facing=west": { "model": "ravensmodels:block/shattered_throne", "y": 270 },
+    "facing=east": { "model": "ravensmodels:block/shattered_throne", "y": 90 }
+  }
+}
