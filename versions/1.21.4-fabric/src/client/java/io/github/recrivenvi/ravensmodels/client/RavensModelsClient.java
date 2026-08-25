@@ -6,9 +6,8 @@ import io.github.recrivenvi.ravensmodels.ModContent;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockEntity;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockItem;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
@@ -19,11 +18,10 @@ import java.util.Map;
 
 public final class RavensModelsClient implements ClientModInitializer {
     private static final Map<Block, ModelGeoModel.Assets> MODELS = Map.of(
-            ModContent.SHATTERED_THRONE, ModelGeoModel.Assets.of("shattered_throne", "mirror_block", Direction.NORTH),
-            ModContent.LOWER_ROUND_CORNER, ModelGeoModel.Assets.of("lower_round_corner", "white_block", Direction.NORTH),
-            ModContent.UPPER_ROUND_CORNER, ModelGeoModel.Assets.of("upper_round_corner", "white_block", Direction.NORTH),
-            ModContent.FLAT_WALL, ModelGeoModel.Assets.of("flat_wall", "white_block", Direction.DOWN),
-            ModContent.VERTICAL_WALL, ModelGeoModel.Assets.of("vertical_wall", "white_block", Direction.NORTH));
+            ModContent.SHATTERED_THRONE, ModelGeoModel.Assets.of("shattered_throne", "mirror_block"),
+            ModContent.LOWER_ROUND_CORNER, ModelGeoModel.Assets.of("lower_round_corner", "white_block"),
+            ModContent.UPPER_ROUND_CORNER, ModelGeoModel.Assets.of("upper_round_corner", "white_block"),
+            ModContent.VERTICAL_WALL, ModelGeoModel.Assets.of("vertical_wall", "white_block"));
 
     @Override
     public void onInitializeClient() {
@@ -36,7 +34,7 @@ public final class RavensModelsClient implements ClientModInitializer {
             @Override
             public GeoItemRenderer<?> getGeoItemRenderer() {
                 if (this.renderer == null) {
-                    this.renderer = new ModelBlockItemRenderer();
+                    this.renderer = new BlockOriginItemRenderer();
                 }
 
                 return this.renderer;
@@ -48,8 +46,8 @@ public final class RavensModelsClient implements ClientModInitializer {
         }
     }
 
-    private static final class ModelBlockItemRenderer extends GeoItemRenderer<ModelBlockItem> {
-        private ModelBlockItemRenderer() {
+    private static final class BlockOriginItemRenderer extends GeoItemRenderer<ModelBlockItem> {
+        private BlockOriginItemRenderer() {
             super(new ModelGeoModel<>(MODELS));
         }
 
@@ -78,7 +76,6 @@ public final class RavensModelsClient implements ClientModInitializer {
                     renderColor);
 
             if (!isReRender) {
-                // GeckoLib raises item models by 0.51 blocks; these geometries use the block origin.
                 poseStack.translate(0, -0.51f, 0);
             }
         }

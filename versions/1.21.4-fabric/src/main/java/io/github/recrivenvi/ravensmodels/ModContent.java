@@ -31,10 +31,8 @@ public final class ModContent {
             "lower_round_corner", HorizontalModelBlock::new, SoundType.STONE);
     public static final HorizontalModelBlock UPPER_ROUND_CORNER = registerModelBlock(
             "upper_round_corner", HorizontalModelBlock::new, SoundType.STONE);
-    public static final DirectionalModelBlock FLAT_WALL = registerModelBlock(
-            "flat_wall", DirectionalModelBlock::new, SoundType.STONE);
-    public static final HorizontalModelBlock VERTICAL_WALL = registerModelBlock(
-            "vertical_wall", HorizontalModelBlock::new, SoundType.STONE);
+    public static final DirectionalModelBlock VERTICAL_WALL = registerModelBlock(
+            "vertical_wall", DirectionalModelBlock::new, SoundType.STONE);
 
     public static final BlockEntityType<ModelBlockEntity> MODEL_BLOCK_ENTITY_TYPE = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE,
@@ -44,7 +42,6 @@ public final class ModContent {
                     SHATTERED_THRONE,
                     LOWER_ROUND_CORNER,
                     UPPER_ROUND_CORNER,
-                    FLAT_WALL,
                     VERTICAL_WALL).build());
 
     private static final ResourceKey<CreativeModeTab> CREATIVE_TAB_KEY = ResourceKey.create(
@@ -58,7 +55,6 @@ public final class ModContent {
                 output.accept(SHATTERED_THRONE);
                 output.accept(LOWER_ROUND_CORNER);
                 output.accept(UPPER_ROUND_CORNER);
-                output.accept(FLAT_WALL);
                 output.accept(VERTICAL_WALL);
             })
             .build();

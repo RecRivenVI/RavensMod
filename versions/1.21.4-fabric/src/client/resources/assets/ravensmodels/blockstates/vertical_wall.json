@@ -3,6 +3,8 @@
     "facing=north": { "model": "ravensmodels:block/vertical_wall" },
     "facing=south": { "model": "ravensmodels:block/vertical_wall", "y": 180 },
     "facing=west": { "model": "ravensmodels:block/vertical_wall", "y": 270 },
-    "facing=east": { "model": "ravensmodels:block/vertical_wall", "y": 90 }
+    "facing=east": { "model": "ravensmodels:block/vertical_wall", "y": 90 },
+    "facing=up": { "model": "ravensmodels:block/vertical_wall" },
+    "facing=down": { "model": "ravensmodels:block/vertical_wall" }
   }
 }

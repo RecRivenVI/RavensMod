@@ -3,7 +3,6 @@ package io.github.recrivenvi.ravensmodels.client;
 import io.github.recrivenvi.ravensmodels.RavensModels;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockEntity;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockItem;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
@@ -53,12 +52,11 @@ public final class ModelGeoModel<T extends GeoAnimatable> extends GeoModel<T> {
         return null;
     }
 
-    public record Assets(ResourceLocation model, ResourceLocation texture, Direction baseDirection) {
-        public static Assets of(String model, String texture, Direction baseDirection) {
+    public record Assets(ResourceLocation model, ResourceLocation texture) {
+        public static Assets of(String model, String texture) {
             return new Assets(
                     ResourceLocation.fromNamespaceAndPath(RavensModels.MOD_ID, "geo/" + model + ".geo.json"),
-                    ResourceLocation.fromNamespaceAndPath(RavensModels.MOD_ID, "textures/block/" + texture + ".png"),
-                    baseDirection);
+                    ResourceLocation.fromNamespaceAndPath(RavensModels.MOD_ID, "textures/block/" + texture + ".png"));
         }
     }
 }

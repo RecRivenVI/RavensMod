@@ -20,7 +20,7 @@ public final class DirectionalModelBlock extends DirectionalBlock implements Ent
 
     public DirectionalModelBlock(Properties properties) {
         super(properties);
-        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.DOWN));
+        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
@@ -30,7 +30,7 @@ public final class DirectionalModelBlock extends DirectionalBlock implements Ent
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getClickedFace());
+        return defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
