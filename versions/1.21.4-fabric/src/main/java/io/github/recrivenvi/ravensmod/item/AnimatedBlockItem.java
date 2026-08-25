@@ -1,6 +1,8 @@
 package io.github.recrivenvi.ravensmod.item;
 
+import org.apache.commons.lang3.mutable.MutableObject;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -8,18 +10,11 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
-public class AnimatedBlockItem extends BlockItem implements GeoItem {
+public final class AnimatedBlockItem extends BlockItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-
-    private static final Map<Block, GeoRenderProviderFactory<?>> RENDER_PROVIDERS = new HashMap<>();
-
-    public static void registerRenderProvider(Block block, GeoRenderProviderFactory<?> provider) {
-        RENDER_PROVIDERS.put(block, provider);
-    }
+    public final MutableObject<GeoRenderProvider> renderProvider = new MutableObject<>();
 
     public AnimatedBlockItem(Block block, Properties properties) {
         super(block, properties);
@@ -34,12 +29,8 @@ public class AnimatedBlockItem extends BlockItem implements GeoItem {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    public void createGeoRenderer(Consumer consumer) {
-        GeoRenderProviderFactory provider = RENDER_PROVIDERS.get(getBlock());
-        if (provider != null) {
-            provider.accept(consumer);
-        }
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(this.renderProvider.getValue());
     }
 }

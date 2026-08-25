@@ -1,9 +1,13 @@
 package io.github.recrivenvi.ravensmod;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.github.recrivenvi.ravensmod.registry.ModContent;
+import net.fabricmc.api.ModInitializer;
 
-public class RavensMod {
+public final class RavensMod implements ModInitializer {
     public static final String MOD_ID = "ravensmod";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+    @Override
+    public void onInitialize() {
+        ModContent.initialize();
+    }
 }

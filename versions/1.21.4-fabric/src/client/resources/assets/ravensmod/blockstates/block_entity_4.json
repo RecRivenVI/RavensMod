@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "vertical_direction=down": { "model": "ravensmod:block/block_entity_4" },
+    "vertical_direction=up": { "model": "ravensmod:block/block_entity_4", "x": 180 },
+    "vertical_direction=north": { "model": "ravensmod:block/block_entity_4" },
+    "vertical_direction=south": { "model": "ravensmod:block/block_entity_4" },
+    "vertical_direction=east": { "model": "ravensmod:block/block_entity_4" },
+    "vertical_direction=west": { "model": "ravensmod:block/block_entity_4" }
+  }
+}

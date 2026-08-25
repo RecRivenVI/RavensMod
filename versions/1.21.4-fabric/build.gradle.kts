@@ -1,24 +1,12 @@
 import java.util.Properties
 
-buildscript {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        maven("https://maven.fabricmc.net/")
-    }
-    dependencies {
-        classpath("net.fabricmc:fabric-loom:1.17.11")
-    }
-}
-
 plugins {
     java
+    id("net.fabricmc.fabric-loom-remap") version "1.17.19"
 }
 
-apply(plugin = "net.fabricmc.fabric-loom-remap")
-
 val minecraftVersion = "1.21.4"
-val fabricLoaderVersion = "0.16.14"
+val fabricLoaderVersion = "0.19.3"
 val fabricApiVersion = "0.119.4+1.21.4"
 val geckolibVersion = "4.8.5"
 
@@ -104,7 +92,6 @@ tasks.processResources {
         "mod_id" to rootProject.property("mod_id") as String,
         "mod_name" to rootProject.property("mod_name") as String,
         "mod_author" to rootProject.property("mod_author") as String,
-        "mod_license" to rootProject.property("mod_license") as String,
         "mod_description" to rootProject.property("mod_description") as String,
         "mod_homepage" to rootProject.property("mod_homepage") as String,
         "mod_sources" to rootProject.property("mod_sources") as String,
@@ -129,16 +116,4 @@ java {
 
 tasks.withType<JavaCompile>().configureEach {
     options.release.set(21)
-}
-
-tasks.named("clientClasses") {
-    doLast {
-        layout.buildDirectory.dir("resources/client").get().asFile.mkdirs()
-    }
-}
-
-tasks.jar {
-    from(rootProject.file("LICENSE")) {
-        rename { "${it}_${project.name}" }
-    }
 }

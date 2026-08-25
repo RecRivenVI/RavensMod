@@ -11,12 +11,11 @@
     "homepage": "${mod_homepage}",
     "sources": "${mod_sources}"
   },
-  "license": "${mod_license}",
   "icon": "assets/ravensmod/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.recrivenvi.ravensmod.RavensModInitializer"
+      "io.github.recrivenvi.ravensmod.RavensMod"
     ],
     "client": [
       "io.github.recrivenvi.ravensmod.client.RavensModClient"
