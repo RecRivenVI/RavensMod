@@ -28,9 +28,10 @@ bin/
 
 *.DS_Store
 
-# fabric
+# local Minecraft development instances
 
-run/
+/runs/
+/local.properties
 
 # java
 

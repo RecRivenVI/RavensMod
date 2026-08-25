@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "homepage": "${mod_homepage}",
+    "sources": "${mod_sources}"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/ravensmod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.recrivenvi.ravensmod.RavensModInitializer"
+    ],
+    "client": [
+      "io.github.recrivenvi.ravensmod.client.RavensModClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${mc_version}",
+    "java": ">=21",
+    "fabric-api": "*",
+    "geckolib": "*"
+  }
+}

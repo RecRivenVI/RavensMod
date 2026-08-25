@@ -1,8 +1,0 @@
-modLoader="javafml"
-loaderVersion="[1,)"
-license="CC0-1.0"
-[[mods]]
-modId="ravensmod"
-version="${version}"
-displayName="Raven's Mod"
-description="A mod programmed by RavenYin, specially made for RadianceMod"
