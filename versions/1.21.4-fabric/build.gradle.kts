@@ -92,7 +92,6 @@ tasks.processResources {
         "mod_id" to rootProject.property("mod_id") as String,
         "mod_name" to rootProject.property("mod_name") as String,
         "mod_author" to rootProject.property("mod_author") as String,
-        "mod_description" to rootProject.property("mod_description") as String,
         "mod_homepage" to rootProject.property("mod_homepage") as String,
         "mod_sources" to rootProject.property("mod_sources") as String,
         "version" to project.version.toString(),

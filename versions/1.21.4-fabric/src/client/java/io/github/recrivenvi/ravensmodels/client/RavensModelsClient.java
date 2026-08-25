@@ -15,7 +15,6 @@ import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
-import java.util.List;
 import java.util.Map;
 
 public final class RavensModelsClient implements ClientModInitializer {
@@ -44,12 +43,7 @@ public final class RavensModelsClient implements ClientModInitializer {
             }
         };
 
-        for (Block block : List.of(
-                ModContent.SHATTERED_THRONE,
-                ModContent.LOWER_ROUND_CORNER,
-                ModContent.UPPER_ROUND_CORNER,
-                ModContent.FLAT_WALL,
-                ModContent.VERTICAL_WALL)) {
+        for (Block block : MODELS.keySet()) {
             ((ModelBlockItem)block.asItem()).setRenderProvider(itemRenderProvider);
         }
     }

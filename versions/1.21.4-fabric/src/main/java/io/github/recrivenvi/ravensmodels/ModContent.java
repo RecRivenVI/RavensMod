@@ -4,7 +4,6 @@ import io.github.recrivenvi.ravensmodels.block.DirectionalModelBlock;
 import io.github.recrivenvi.ravensmodels.block.HorizontalModelBlock;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockEntity;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockItem;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -53,6 +52,15 @@ public final class ModContent {
     private static final CreativeModeTab CREATIVE_TAB = CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
             .icon(() -> new ItemStack(SHATTERED_THRONE))
             .title(Component.translatable("itemGroup.ravensmodels"))
+            .displayItems((parameters, output) -> {
+                output.accept(MIRROR_BLOCK);
+                output.accept(WHITE_BLOCK);
+                output.accept(SHATTERED_THRONE);
+                output.accept(LOWER_ROUND_CORNER);
+                output.accept(UPPER_ROUND_CORNER);
+                output.accept(FLAT_WALL);
+                output.accept(VERTICAL_WALL);
+            })
             .build();
 
     private ModContent() {
@@ -60,15 +68,6 @@ public final class ModContent {
 
     public static void initialize() {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, CREATIVE_TAB_KEY, CREATIVE_TAB);
-        ItemGroupEvents.modifyEntriesEvent(CREATIVE_TAB_KEY).register(entries -> {
-            entries.accept(MIRROR_BLOCK);
-            entries.accept(WHITE_BLOCK);
-            entries.accept(SHATTERED_THRONE);
-            entries.accept(LOWER_ROUND_CORNER);
-            entries.accept(UPPER_ROUND_CORNER);
-            entries.accept(FLAT_WALL);
-            entries.accept(VERTICAL_WALL);
-        });
     }
 
     private static Block registerSimpleBlock(String name, SoundType sound) {
