@@ -1,6 +1,7 @@
 package io.github.recrivenvi.ravensmodels;
 
 import io.github.recrivenvi.ravensmodels.block.DirectionalModelBlock;
+import io.github.recrivenvi.ravensmodels.block.ConnectorModelBlock;
 import io.github.recrivenvi.ravensmodels.block.HorizontalModelBlock;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockEntity;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockItem;
@@ -34,8 +35,8 @@ public final class ModContent {
             "upper_round_corner", HorizontalModelBlock::new, SoundType.STONE);
     public static final StairModelBlock G3_ROUND_CORNER = registerModelBlock(
             "g3_round_corner", StairModelBlock::new, SoundType.STONE);
-    public static final DirectionalModelBlock G3_CONNECTOR = registerModelBlock(
-            "g3_connector", DirectionalModelBlock::new, SoundType.STONE);
+    public static final ConnectorModelBlock G3_CONNECTOR = registerModelBlock(
+            "g3_connector", ConnectorModelBlock::new, SoundType.STONE);
     public static final DirectionalModelBlock VERTICAL_WALL = registerModelBlock(
             "vertical_wall", DirectionalModelBlock::new, SoundType.STONE);
 

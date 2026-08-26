@@ -7,62 +7,59 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public final class StairModelBlock extends HorizontalDirectionalBlock implements EntityBlock {
-    private static final MapCodec<StairModelBlock> CODEC = simpleCodec(StairModelBlock::new);
+public final class ConnectorModelBlock extends DirectionalBlock implements EntityBlock {
+    private static final MapCodec<ConnectorModelBlock> CODEC = simpleCodec(ConnectorModelBlock::new);
 
-    private static final VoxelShape NORTH_SHAPE = box(0, 0, 0, 16, 16, 1);
-    private static final VoxelShape SOUTH_SHAPE = box(0, 0, 15, 16, 16, 16);
+    private static final VoxelShape NORTH_SHAPE = box(0, 0, 15, 16, 16, 16);
+    private static final VoxelShape SOUTH_SHAPE = box(0, 0, 0, 16, 16, 1);
     private static final VoxelShape EAST_SHAPE = box(15, 0, 0, 16, 16, 16);
     private static final VoxelShape WEST_SHAPE = box(0, 0, 0, 1, 16, 16);
-    private static final VoxelShape TOP_SHAPE = box(0, 15, 0, 16, 16, 16);
-    private static final VoxelShape BOTTOM_SHAPE = box(0, 0, 0, 16, 1, 16);
+    private static final VoxelShape UP_SHAPE = box(0, 15, 0, 16, 16, 16);
+    private static final VoxelShape DOWN_SHAPE = box(0, 0, 0, 16, 1, 16);
 
     private final ImmutableMap<BlockState, VoxelShape> shapes;
 
-    public StairModelBlock(Properties properties) {
+    public ConnectorModelBlock(Properties properties) {
         super(properties);
-        registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(BlockStateProperties.HALF, Half.BOTTOM));
-        this.shapes = getShapeForEachState(StairModelBlock::shapeForState);
+        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.shapes = getShapeForEachState(ConnectorModelBlock::shapeForState);
     }
 
     @Override
-    protected @NotNull MapCodec<StairModelBlock> codec() {
+    protected @NotNull MapCodec<ConnectorModelBlock> codec() {
         return CODEC;
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction clickedFace = context.getClickedFace();
-        BlockPos clickedPos = context.getClickedPos();
-        Half half = clickedFace == Direction.DOWN
-                || (clickedFace != Direction.UP
-                        && context.getClickLocation().y - clickedPos.getY() > 0.5)
-                ? Half.TOP
-                : Half.BOTTOM;
+        return defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+    }
 
-        return defaultBlockState()
-                .setValue(FACING, context.getHorizontalDirection().getOpposite())
-                .setValue(BlockStateProperties.HALF, half);
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, BlockStateProperties.HALF);
+        builder.add(FACING);
     }
 
     @Override
@@ -88,15 +85,13 @@ public final class StairModelBlock extends HorizontalDirectionalBlock implements
     }
 
     private static VoxelShape shapeForState(BlockState state) {
-        VoxelShape side = switch (state.getValue(FACING)) {
-            case SOUTH -> NORTH_SHAPE;
+        return switch (state.getValue(FACING)) {
+            case SOUTH -> SOUTH_SHAPE;
             case WEST -> EAST_SHAPE;
             case EAST -> WEST_SHAPE;
-            default -> SOUTH_SHAPE;
+            case UP -> DOWN_SHAPE;
+            case DOWN -> UP_SHAPE;
+            default -> NORTH_SHAPE;
         };
-        VoxelShape half = state.getValue(BlockStateProperties.HALF) == Half.TOP
-                ? TOP_SHAPE
-                : BOTTOM_SHAPE;
-        return Shapes.or(side, half);
     }
 }
