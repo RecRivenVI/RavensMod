@@ -4,6 +4,7 @@ import io.github.recrivenvi.ravensmodels.block.DirectionalModelBlock;
 import io.github.recrivenvi.ravensmodels.block.HorizontalModelBlock;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockEntity;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockItem;
+import io.github.recrivenvi.ravensmodels.block.StairModelBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -31,6 +32,10 @@ public final class ModContent {
             "lower_round_corner", HorizontalModelBlock::new, SoundType.STONE);
     public static final HorizontalModelBlock UPPER_ROUND_CORNER = registerModelBlock(
             "upper_round_corner", HorizontalModelBlock::new, SoundType.STONE);
+    public static final StairModelBlock G3_ROUND_CORNER = registerModelBlock(
+            "g3_round_corner", StairModelBlock::new, SoundType.STONE);
+    public static final DirectionalModelBlock G3_CONNECTOR = registerModelBlock(
+            "g3_connector", DirectionalModelBlock::new, SoundType.STONE);
     public static final DirectionalModelBlock VERTICAL_WALL = registerModelBlock(
             "vertical_wall", DirectionalModelBlock::new, SoundType.STONE);
 
@@ -42,6 +47,8 @@ public final class ModContent {
                     SHATTERED_THRONE,
                     LOWER_ROUND_CORNER,
                     UPPER_ROUND_CORNER,
+                    G3_ROUND_CORNER,
+                    G3_CONNECTOR,
                     VERTICAL_WALL).build());
 
     private static final ResourceKey<CreativeModeTab> CREATIVE_TAB_KEY = ResourceKey.create(
@@ -55,6 +62,8 @@ public final class ModContent {
                 output.accept(SHATTERED_THRONE);
                 output.accept(LOWER_ROUND_CORNER);
                 output.accept(UPPER_ROUND_CORNER);
+                output.accept(G3_ROUND_CORNER);
+                output.accept(G3_CONNECTOR);
                 output.accept(VERTICAL_WALL);
             })
             .build();

@@ -7,9 +7,13 @@
   "block.ravensmodels.shattered_throne": "Shattered Throne",
   "block.ravensmodels.lower_round_corner": "Lower Round Corner",
   "block.ravensmodels.upper_round_corner": "Upper Round Corner",
+  "block.ravensmodels.g3_round_corner": "G3 Round Corner",
+  "block.ravensmodels.g3_connector": "G3 Connector",
   "block.ravensmodels.vertical_wall": "Vertical Wall",
   "item.ravensmodels.shattered_throne": "Shattered Throne",
   "item.ravensmodels.lower_round_corner": "Lower Round Corner",
   "item.ravensmodels.upper_round_corner": "Upper Round Corner",
+  "item.ravensmodels.g3_round_corner": "G3 Round Corner",
+  "item.ravensmodels.g3_connector": "G3 Connector",
   "item.ravensmodels.vertical_wall": "Vertical Wall"
 }

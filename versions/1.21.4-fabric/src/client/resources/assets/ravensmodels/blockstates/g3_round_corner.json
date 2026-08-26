@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,half=bottom": { "model": "ravensmodels:block/g3_round_corner" },
+    "facing=east,half=bottom": { "model": "ravensmodels:block/g3_round_corner", "y": 90 },
+    "facing=south,half=bottom": { "model": "ravensmodels:block/g3_round_corner", "y": 180 },
+    "facing=west,half=bottom": { "model": "ravensmodels:block/g3_round_corner", "y": 270 },
+    "facing=north,half=top": { "model": "ravensmodels:block/g3_round_corner", "x": 180 },
+    "facing=east,half=top": { "model": "ravensmodels:block/g3_round_corner", "x": 180, "y": 90 },
+    "facing=south,half=top": { "model": "ravensmodels:block/g3_round_corner", "x": 180, "y": 180 },
+    "facing=west,half=top": { "model": "ravensmodels:block/g3_round_corner", "x": 180, "y": 270 }
+  }
+}

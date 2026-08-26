@@ -21,6 +21,8 @@ public final class RavensModelsClient implements ClientModInitializer {
             ModContent.SHATTERED_THRONE, ModelGeoModel.Assets.of("shattered_throne", "mirror_block"),
             ModContent.LOWER_ROUND_CORNER, ModelGeoModel.Assets.of("lower_round_corner", "white_block"),
             ModContent.UPPER_ROUND_CORNER, ModelGeoModel.Assets.of("upper_round_corner", "white_block"),
+            ModContent.G3_ROUND_CORNER, ModelGeoModel.Assets.of("g3_round_corner", "white_block"),
+            ModContent.G3_CONNECTOR, ModelGeoModel.Assets.of("g3_connector", "white_block"),
             ModContent.VERTICAL_WALL, ModelGeoModel.Assets.of("vertical_wall", "white_block"));
 
     @Override

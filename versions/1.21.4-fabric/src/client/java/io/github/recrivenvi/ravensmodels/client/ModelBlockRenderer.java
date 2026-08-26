@@ -4,6 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockEntity;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 
 public final class ModelBlockRenderer extends GeoBlockRenderer<ModelBlockEntity> {
@@ -23,6 +26,12 @@ public final class ModelBlockRenderer extends GeoBlockRenderer<ModelBlockEntity>
             case DOWN -> poseStack.mulPose(Axis.XN.rotationDegrees(90));
             default -> {
             }
+        }
+
+        BlockState state = this.animatable.getBlockState();
+        if (state.hasProperty(BlockStateProperties.HALF)
+                && state.getValue(BlockStateProperties.HALF) == Half.TOP) {
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180));
         }
 
         poseStack.translate(0, -0.5, 0);
