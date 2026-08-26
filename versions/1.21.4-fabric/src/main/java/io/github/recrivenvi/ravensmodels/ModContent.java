@@ -3,6 +3,7 @@ package io.github.recrivenvi.ravensmodels;
 import io.github.recrivenvi.ravensmodels.block.DirectionalModelBlock;
 import io.github.recrivenvi.ravensmodels.block.ConnectorModelBlock;
 import io.github.recrivenvi.ravensmodels.block.HorizontalModelBlock;
+import io.github.recrivenvi.ravensmodels.block.ModelBlock;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockEntity;
 import io.github.recrivenvi.ravensmodels.block.ModelBlockItem;
 import io.github.recrivenvi.ravensmodels.block.StairModelBlock;
@@ -27,6 +28,10 @@ import java.util.function.Function;
 public final class ModContent {
     public static final Block MIRROR_BLOCK = registerSimpleBlock("mirror_block", SoundType.GLASS);
     public static final Block WHITE_BLOCK = registerSimpleBlock("white_block", SoundType.STONE);
+    public static final ModelBlock MIRROR_SPHERE = registerModelBlock(
+            "mirror_sphere", ModelBlock::new, SoundType.GLASS);
+    public static final ModelBlock WHITE_SPHERE = registerModelBlock(
+            "white_sphere", ModelBlock::new, SoundType.STONE);
     public static final HorizontalModelBlock SHATTERED_THRONE = registerModelBlock(
             "shattered_throne", HorizontalModelBlock::new, SoundType.STONE);
     public static final HorizontalModelBlock LOWER_ROUND_CORNER = registerModelBlock(
@@ -45,6 +50,8 @@ public final class ModContent {
             id("model_block"),
             FabricBlockEntityTypeBuilder.create(
                     ModelBlockEntity::new,
+                    MIRROR_SPHERE,
+                    WHITE_SPHERE,
                     SHATTERED_THRONE,
                     LOWER_ROUND_CORNER,
                     UPPER_ROUND_CORNER,
@@ -60,6 +67,8 @@ public final class ModContent {
             .displayItems((parameters, output) -> {
                 output.accept(MIRROR_BLOCK);
                 output.accept(WHITE_BLOCK);
+                output.accept(MIRROR_SPHERE);
+                output.accept(WHITE_SPHERE);
                 output.accept(SHATTERED_THRONE);
                 output.accept(LOWER_ROUND_CORNER);
                 output.accept(UPPER_ROUND_CORNER);
