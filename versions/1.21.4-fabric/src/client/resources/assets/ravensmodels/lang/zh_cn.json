@@ -9,15 +9,9 @@
   "item.ravensmodels.mirror_sphere": "镜面球体",
   "item.ravensmodels.white_sphere": "白色球体",
   "block.ravensmodels.shattered_throne": "破碎王座",
-  "block.ravensmodels.lower_round_corner": "下圆角",
-  "block.ravensmodels.upper_round_corner": "上圆角",
   "block.ravensmodels.g3_round_corner": "G3 弯角",
   "block.ravensmodels.g3_connector": "G3 连接板",
-  "block.ravensmodels.vertical_wall": "竖墙",
   "item.ravensmodels.shattered_throne": "破碎王座",
-  "item.ravensmodels.lower_round_corner": "下圆角",
-  "item.ravensmodels.upper_round_corner": "上圆角",
   "item.ravensmodels.g3_round_corner": "G3 弯角",
-  "item.ravensmodels.g3_connector": "G3 连接板",
-  "item.ravensmodels.vertical_wall": "竖墙"
+  "item.ravensmodels.g3_connector": "G3 连接板"
 }

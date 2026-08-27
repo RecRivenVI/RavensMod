@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "ravensmodels:block/mirror_sphere",
-    "particle": "ravensmodels:block/mirror_sphere"
+    "all": "ravensmodels:block/mirror_sphere_atlas",
+    "particle": "ravensmodels:block/mirror_sphere_atlas"
   }
 }

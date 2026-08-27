@@ -18,17 +18,14 @@ import java.util.Map;
 
 public final class RavensModelsClient implements ClientModInitializer {
     private static final Map<Block, ModelGeoModel.Assets> MODELS = Map.of(
-            ModContent.MIRROR_SPHERE, ModelGeoModel.Assets.of("sphere", "mirror_sphere_atlas"),
-            ModContent.WHITE_SPHERE, ModelGeoModel.Assets.of("sphere", "white_sphere_atlas"),
             ModContent.SHATTERED_THRONE, ModelGeoModel.Assets.of("shattered_throne", "mirror_block"),
-            ModContent.LOWER_ROUND_CORNER, ModelGeoModel.Assets.of("lower_round_corner", "white_block"),
-            ModContent.UPPER_ROUND_CORNER, ModelGeoModel.Assets.of("upper_round_corner", "white_block"),
             ModContent.G3_ROUND_CORNER, ModelGeoModel.Assets.of("g3_round_corner", "white_block"),
-            ModContent.G3_CONNECTOR, ModelGeoModel.Assets.of("g3_connector", "white_block"),
-            ModContent.VERTICAL_WALL, ModelGeoModel.Assets.of("vertical_wall", "white_block"));
+            ModContent.G3_CONNECTOR, ModelGeoModel.Assets.of("g3_connector", "white_block"));
 
     @Override
     public void onInitializeClient() {
+        SphereBakedModel.register();
+
         ModelGeoModel<ModelBlockEntity> blockModel = new ModelGeoModel<>(MODELS);
         BlockEntityRenderers.register(ModContent.MODEL_BLOCK_ENTITY_TYPE, context -> new ModelBlockRenderer(blockModel));
 
