@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "ravensmodels:block/g3_round_corner"
+    "model": "ravensmodels:block/dodecahedron"
   }
 }

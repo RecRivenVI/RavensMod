@@ -4,23 +4,25 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public final class ConnectorModelBlock extends DirectionalBlock implements EntityBlock {
-    private static final MapCodec<ConnectorModelBlock> CODEC = simpleCodec(ConnectorModelBlock::new);
+public final class DirectionalPanelBlock extends DirectionalBlock implements SimpleWaterloggedBlock {
+    private static final MapCodec<DirectionalPanelBlock> CODEC = simpleCodec(DirectionalPanelBlock::new);
 
     private static final VoxelShape NORTH_SHAPE = box(0, 0, 15, 16, 16, 16);
     private static final VoxelShape SOUTH_SHAPE = box(0, 0, 0, 16, 16, 1);
@@ -31,35 +33,54 @@ public final class ConnectorModelBlock extends DirectionalBlock implements Entit
 
     private final ImmutableMap<BlockState, VoxelShape> shapes;
 
-    public ConnectorModelBlock(Properties properties) {
+    public DirectionalPanelBlock(Properties properties) {
         super(properties);
-        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
-        this.shapes = getShapeForEachState(ConnectorModelBlock::shapeForState);
+        registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(BlockStateProperties.WATERLOGGED, false));
+        this.shapes = getShapeForEachState(DirectionalPanelBlock::shapeForState);
     }
 
     @Override
-    protected @NotNull MapCodec<ConnectorModelBlock> codec() {
+    protected @NotNull MapCodec<DirectionalPanelBlock> codec() {
         return CODEC;
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        return defaultBlockState()
+                .setValue(FACING, context.getNearestLookingDirection().getOpposite())
+                .setValue(
+                        BlockStateProperties.WATERLOGGED,
+                        context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
-        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    protected BlockState updateShape(
+            BlockState state,
+            LevelReader level,
+            ScheduledTickAccess tickAccess,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            RandomSource random) {
+        if (state.getValue(BlockStateProperties.WATERLOGGED)) {
+            tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        return super.updateShape(state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    protected FluidState getFluidState(BlockState state) {
+        return state.getValue(BlockStateProperties.WATERLOGGED)
+                ? Fluids.WATER.getSource(false)
+                : super.getFluidState(state);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, BlockStateProperties.WATERLOGGED);
     }
 
     @Override
@@ -72,16 +93,6 @@ public final class ConnectorModelBlock extends DirectionalBlock implements Entit
     protected VoxelShape getCollisionShape(
             BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return this.shapes.get(state);
-    }
-
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ModelBlockEntity(pos, state);
-    }
-
-    @Override
-    protected @NotNull RenderShape getRenderShape(BlockState state) {
-        return RenderShape.INVISIBLE;
     }
 
     private static VoxelShape shapeForState(BlockState state) {

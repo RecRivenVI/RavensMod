@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "ravensmodels:block/g3_outer_atlas",
+    "top": "ravensmodels:block/g3_outer_atlas",
+    "side": "ravensmodels:block/g3_outer_atlas",
+    "particle": "ravensmodels:block/g3_outer_atlas"
+  }
+}

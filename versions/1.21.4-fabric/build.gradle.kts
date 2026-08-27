@@ -8,7 +8,6 @@ plugins {
 val minecraftVersion = "1.21.4"
 val fabricLoaderVersion = "0.19.3"
 val fabricApiVersion = "0.119.4+1.21.4"
-val geckolibVersion = "4.8.5"
 
 group = rootProject.property("maven_group") as String
 version = "${rootProject.property("mod_version")}+$minecraftVersion"
@@ -16,14 +15,6 @@ base.archivesName.set(rootProject.property("artifact_name") as String)
 
 repositories {
     mavenCentral()
-    exclusiveContent {
-        forRepository {
-            maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") { name = "GeckoLib" }
-        }
-        filter {
-            includeGroup("software.bernie.geckolib")
-        }
-    }
 }
 
 val loom = the<net.fabricmc.loom.api.LoomGradleExtensionAPI>()
@@ -84,7 +75,6 @@ dependencies {
     "mappings"(loom.officialMojangMappings())
     "modImplementation"("net.fabricmc:fabric-loader:$fabricLoaderVersion")
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-    "modImplementation"("software.bernie.geckolib:geckolib-fabric-1.21.4:$geckolibVersion")
 }
 
 tasks.processResources {

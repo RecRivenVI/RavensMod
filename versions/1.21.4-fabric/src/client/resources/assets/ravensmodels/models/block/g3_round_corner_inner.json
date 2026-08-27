@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "ravensmodels:block/g3_inner_atlas",
+    "top": "ravensmodels:block/g3_inner_atlas",
+    "side": "ravensmodels:block/g3_inner_atlas",
+    "particle": "ravensmodels:block/g3_inner_atlas"
+  }
+}

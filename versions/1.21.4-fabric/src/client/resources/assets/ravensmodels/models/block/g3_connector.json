@@ -1,7 +1,21 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ravensmodels:block/item_display_experiment",
   "textures": {
-    "all": "ravensmodels:block/white_block",
-    "particle": "ravensmodels:block/white_block"
-  }
+    "particle": "ravensmodels:block/white_block",
+    "all": "ravensmodels:block/white_block"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 1, 16],
+      "faces": {
+        "down": { "uv": [0, 0, 16, 16], "texture": "#all" },
+        "up": { "uv": [0, 0, 16, 16], "texture": "#all" },
+        "north": { "uv": [0, 15, 16, 16], "texture": "#all" },
+        "south": { "uv": [0, 15, 16, 16], "texture": "#all" },
+        "west": { "uv": [0, 15, 16, 16], "texture": "#all" },
+        "east": { "uv": [0, 15, 16, 16], "texture": "#all" }
+      }
+    }
+  ]
 }

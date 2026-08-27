@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "ravensmodels:block/g3_item_display",
   "textures": {
-    "all": "ravensmodels:block/white_block",
-    "particle": "ravensmodels:block/white_block"
+    "bottom": "ravensmodels:block/g3_straight_atlas",
+    "top": "ravensmodels:block/g3_straight_atlas",
+    "side": "ravensmodels:block/g3_straight_atlas",
+    "particle": "ravensmodels:block/g3_straight_atlas"
   }
 }
