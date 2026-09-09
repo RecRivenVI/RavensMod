@@ -15,5 +15,13 @@
   "block.ravensmodels.g3_connector": "G3 Connector",
   "item.ravensmodels.shattered_throne": "Shattered Throne",
   "item.ravensmodels.g3_round_corner": "G3 Round Corner",
-  "item.ravensmodels.g3_connector": "G3 Connector"
+  "item.ravensmodels.g3_connector": "G3 Connector",
+  "block.ravensmodels.david_bust": "David Plaster Bust",
+  "item.ravensmodels.david_bust": "David Plaster Bust",
+  "block.ravensmodels.plastic_chair": "White Plastic Chair",
+  "item.ravensmodels.plastic_chair": "White Plastic Chair",
+  "entity.ravensmodels.chair_seat": "Chair Seat",
+  "message.ravensmodels.chair_occupied": "This chair is occupied.",
+  "item.ravensmodels.ace_of_spades": "Ace of Spades",
+  "block.ravensmodels.ace_of_spades": "Ace of Spades"
 }

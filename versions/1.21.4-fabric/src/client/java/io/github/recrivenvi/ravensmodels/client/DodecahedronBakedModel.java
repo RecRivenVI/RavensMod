@@ -40,7 +40,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-/** A flat-shaded regular dodecahedron with no PBR material maps. */
+/** A flat-shaded regular dodecahedron using the shared white plaster material. */
 public final class DodecahedronBakedModel implements BakedModel, FabricBakedModel {
     private static final ResourceLocation GEOMETRY = id("models/mesh/dodecahedron.json");
     private static final ResourceLocation BLOCK = id("dodecahedron");
@@ -107,10 +107,6 @@ public final class DodecahedronBakedModel implements BakedModel, FabricBakedMode
                 if (root.get("uv_handedness").getAsInt() != -1) {
                     throw new IllegalStateException("Dodecahedron must declare uv_handedness=-1: " + GEOMETRY);
                 }
-                if (root.get("pbr").getAsBoolean()) {
-                    throw new IllegalStateException("Dodecahedron must not use PBR maps: " + GEOMETRY);
-                }
-
                 JsonArray rawVertices = root.getAsJsonArray("vertices");
                 Vector3f[] positions = new Vector3f[rawVertices.size()];
                 for (int index = 0; index < rawVertices.size(); index++) {

@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:filter",
+      "pattern": {
+        "namespace": "^ravensmodels$",
+        "path": "^(block|item)/.*_[ns]$"
+      }
+    }
+  ]
+}

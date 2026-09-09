@@ -15,5 +15,13 @@
   "block.ravensmodels.g3_connector": "G3 连接板",
   "item.ravensmodels.shattered_throne": "破碎王座",
   "item.ravensmodels.g3_round_corner": "G3 弯角",
-  "item.ravensmodels.g3_connector": "G3 连接板"
+  "item.ravensmodels.g3_connector": "G3 连接板",
+  "block.ravensmodels.david_bust": "大卫石膏头像",
+  "item.ravensmodels.david_bust": "大卫石膏头像",
+  "block.ravensmodels.plastic_chair": "白色塑料椅",
+  "item.ravensmodels.plastic_chair": "白色塑料椅",
+  "entity.ravensmodels.chair_seat": "椅座",
+  "message.ravensmodels.chair_occupied": "这把椅子已经有人坐了。",
+  "item.ravensmodels.ace_of_spades": "黑桃 A",
+  "block.ravensmodels.ace_of_spades": "黑桃 A"
 }

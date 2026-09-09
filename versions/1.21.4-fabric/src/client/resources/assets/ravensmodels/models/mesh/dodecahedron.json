@@ -3,7 +3,6 @@
   "uv_handedness": -1,
   "construction": "exact golden-ratio vertices with planar pentagon faces",
   "shading": "flat",
-  "pbr": false,
   "vertices": [
     [
       0.19098301,

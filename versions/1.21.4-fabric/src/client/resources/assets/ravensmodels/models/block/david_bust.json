@@ -1,0 +1,6 @@
+{
+  "parent": "ravensmodels:block/item_display_experiment",
+  "textures": {
+    "particle": "ravensmodels:block/david_bust_atlas"
+  }
+}

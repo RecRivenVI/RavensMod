@@ -1,0 +1,6 @@
+{
+  "parent": "ravensmodels:block/item_display_experiment",
+  "textures": {
+    "particle": "ravensmodels:block/plastic_chair_atlas"
+  }
+}

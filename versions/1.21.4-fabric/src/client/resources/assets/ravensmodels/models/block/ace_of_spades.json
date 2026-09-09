@@ -1,0 +1,6 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "ravensmodels:item/ace_of_spades"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "ravensmodels:block/david_bust" },
+    "facing=east": { "model": "ravensmodels:block/david_bust" },
+    "facing=south": { "model": "ravensmodels:block/david_bust" },
+    "facing=west": { "model": "ravensmodels:block/david_bust" }
+  }
+}

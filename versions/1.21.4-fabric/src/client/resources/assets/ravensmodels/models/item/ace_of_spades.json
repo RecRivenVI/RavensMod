@@ -1,0 +1,39 @@
+{
+  "ambientocclusion": false,
+  "gui_light": "front",
+  "textures": {
+    "particle": "ravensmodels:item/ace_of_spades"
+  },
+  "display": {
+    "gui": {
+      "rotation": [90, 45, -90],
+      "translation": [2.5, -5.5, 0],
+      "scale": [2, 2, 2]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 0, 0],
+      "translation": [5, -5, 0],
+      "scale": [4, 4, 4]
+    },
+    "thirdperson_righthand": {
+      "rotation": [0, 0, 0],
+      "translation": [0, -0.5, 2.5],
+      "scale": [1, 1, 1]
+    },
+    "fixed": {
+      "rotation": [0, -90, 0],
+      "translation": [-5, -1.5, 0.5],
+      "scale": [1.5, 1.5, 1.5]
+    },
+    "ground": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 0, 3.15],
+      "scale": [1, 1, 1]
+    },
+    "head": {
+      "rotation": [0, 0, 0],
+      "translation": [0, -1, 0],
+      "scale": [4, 4, 4]
+    }
+  }
+}

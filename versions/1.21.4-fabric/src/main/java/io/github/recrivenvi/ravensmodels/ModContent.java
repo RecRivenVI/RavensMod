@@ -1,8 +1,11 @@
 package io.github.recrivenvi.ravensmodels;
 
 import io.github.recrivenvi.ravensmodels.block.DirectionalPanelBlock;
+import io.github.recrivenvi.ravensmodels.block.AceOfSpadesBlock;
+import io.github.recrivenvi.ravensmodels.block.ChairSeatEntity;
 import io.github.recrivenvi.ravensmodels.block.G3StairBlock;
 import io.github.recrivenvi.ravensmodels.block.HorizontalFacingBlock;
+import io.github.recrivenvi.ravensmodels.block.PlasticChairBlock;
 import io.github.recrivenvi.ravensmodels.block.WaterloggedBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,6 +13,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -17,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Function;
 
@@ -32,6 +38,12 @@ public final class ModContent {
             "g3_round_corner", G3StairBlock::new, SoundType.STONE, true);
     public static final DirectionalPanelBlock G3_CONNECTOR = registerBlock(
             "g3_connector", DirectionalPanelBlock::new, SoundType.STONE, true);
+    public static final HorizontalFacingBlock DAVID_BUST = registerBlock(
+            "david_bust", HorizontalFacingBlock::new, SoundType.STONE, true);
+    public static final PlasticChairBlock PLASTIC_CHAIR = registerBlock(
+            "plastic_chair", PlasticChairBlock::new, SoundType.WOOD, true);
+    public static final EntityType<ChairSeatEntity> CHAIR_SEAT = registerChairSeat();
+    public static final AceOfSpadesBlock ACE_OF_SPADES = registerAceOfSpades();
 
     private static final ResourceKey<CreativeModeTab> CREATIVE_TAB_KEY = ResourceKey.create(
             BuiltInRegistries.CREATIVE_MODE_TAB.key(), id("ravensmodels"));
@@ -47,6 +59,9 @@ public final class ModContent {
                 output.accept(SHATTERED_THRONE);
                 output.accept(G3_ROUND_CORNER);
                 output.accept(G3_CONNECTOR);
+                output.accept(DAVID_BUST);
+                output.accept(PLASTIC_CHAIR);
+                output.accept(ACE_OF_SPADES);
             })
             .build();
 
@@ -59,6 +74,30 @@ public final class ModContent {
 
     private static Block registerSimpleBlock(String name, SoundType sound) {
         return registerBlock(name, Block::new, sound, false);
+    }
+
+    private static AceOfSpadesBlock registerAceOfSpades() {
+        ResourceLocation id = id("ace_of_spades");
+        AceOfSpadesBlock block = Registry.register(BuiltInRegistries.BLOCK, id,
+                new AceOfSpadesBlock(BlockBehaviour.Properties.of().sound(SoundType.METAL).noOcclusion()
+                        .setId(ResourceKey.create(Registries.BLOCK, id))));
+        Registry.register(BuiltInRegistries.ITEM, id,
+                new BlockItem(block, new Item.Properties().stacksTo(1).setId(ResourceKey.create(Registries.ITEM, id))));
+        return block;
+    }
+
+    private static EntityType<ChairSeatEntity> registerChairSeat() {
+        ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id("chair_seat"));
+        return Registry.register(BuiltInRegistries.ENTITY_TYPE, key,
+                EntityType.Builder.<ChairSeatEntity>of(ChairSeatEntity::new, MobCategory.MISC)
+                        .sized(0.01f, 0.01f)
+                        .passengerAttachments(Vec3.ZERO)
+                        .noSummon()
+                        .noLootTable()
+                        .fireImmune()
+                        .clientTrackingRange(8)
+                        .updateInterval(1)
+                        .build(key));
     }
 
     private static Block registerStaticMeshBlock(String name, SoundType sound) {

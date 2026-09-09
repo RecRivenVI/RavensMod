@@ -15,9 +15,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public final class HorizontalFacingBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
+public class HorizontalFacingBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
     private static final MapCodec<HorizontalFacingBlock> CODEC = simpleCodec(HorizontalFacingBlock::new);
 
     public HorizontalFacingBlock(Properties properties) {
@@ -28,7 +31,7 @@ public final class HorizontalFacingBlock extends HorizontalDirectionalBlock impl
     }
 
     @Override
-    protected @NotNull MapCodec<HorizontalFacingBlock> codec() {
+    protected @NotNull MapCodec<? extends HorizontalFacingBlock> codec() {
         return CODEC;
     }
 
@@ -67,5 +70,25 @@ public final class HorizontalFacingBlock extends HorizontalDirectionalBlock impl
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, BlockStateProperties.WATERLOGGED);
+    }
+
+    protected static VoxelShape rotateShape(VoxelShape north, Direction facing) {
+        int turns = switch (facing) {
+            case EAST -> 1;
+            case SOUTH -> 2;
+            case WEST -> 3;
+            default -> 0;
+        };
+        VoxelShape result = north;
+        for (int turn = 0; turn < turns; turn++) {
+            VoxelShape rotated = Shapes.empty();
+            for (AABB box : result.toAabbs()) {
+                rotated = Shapes.or(rotated, Shapes.box(
+                        1 - box.maxZ, box.minY, box.minX,
+                        1 - box.minZ, box.maxY, box.maxX));
+            }
+            result = rotated;
+        }
+        return result;
     }
 }
