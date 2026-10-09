@@ -1,4 +1,7 @@
 pluginManagement {
+    includeBuild("gradle/configuration") {
+        name = "raven-configuration"
+    }
     repositories {
         mavenCentral()
         gradlePluginPortal()
@@ -12,4 +15,6 @@ plugins {
 
 rootProject.name = "RavensModels"
 
-include(":versions:1.21.4-fabric")
+include(":version:1.21.4-fabric")
+project(":version").projectDir = file("versions")
+project(":version:1.21.4-fabric").projectDir = file("versions/1.21.4-fabric")

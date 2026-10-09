@@ -11,7 +11,7 @@
     "sources": "${mod_sources}"
   },
   "icon": "assets/ravensmodels/icon.png",
-  "environment": "*",
+  "environment": "${mod_environment}",
   "entrypoints": {
     "main": [
       "io.github.recrivenvi.ravensmodels.RavensModels"
@@ -23,7 +23,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": "~${mc_version}",
-    "java": ">=21",
+    "java": ">=${java_version}",
     "fabric-api": "*"
   }
 }
