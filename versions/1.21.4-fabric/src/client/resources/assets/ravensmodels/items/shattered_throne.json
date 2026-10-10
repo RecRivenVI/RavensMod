@@ -1,6 +1,6 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "ravensmodels:block/shattered_throne"
-  }
+    "model": {
+        "type": "minecraft:model",
+        "model": "ravensmodels:block/shattered_throne"
+    }
 }

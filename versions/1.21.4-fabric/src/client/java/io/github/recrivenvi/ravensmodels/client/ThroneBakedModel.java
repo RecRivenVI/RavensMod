@@ -5,6 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.recrivenvi.ravensmodels.RavensModels;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
@@ -34,16 +43,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 /** Converts the authored throne geometry directly into a reload-safe Fabric mesh. */
 public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
     private static final ResourceLocation GEOMETRY = id("geo/shattered_throne.geo.json");
@@ -52,16 +51,14 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
     private static final ResourceLocation TEXTURE = id("block/mirror_block");
 
     private static final Face[] CUBE_FACES = {
-            new Face(new int[] {0, 1, 3, 2}, new Vector3f(-1, 0, 0)),
-            new Face(new int[] {5, 4, 6, 7}, new Vector3f(1, 0, 0)),
-            new Face(new int[] {1, 0, 4, 5}, new Vector3f(0, -1, 0)),
-            new Face(new int[] {2, 3, 7, 6}, new Vector3f(0, 1, 0)),
-            new Face(new int[] {4, 0, 2, 6}, new Vector3f(0, 0, -1)),
-            new Face(new int[] {1, 5, 7, 3}, new Vector3f(0, 0, 1))
+        new Face(new int[] {0, 1, 3, 2}, new Vector3f(-1, 0, 0)),
+        new Face(new int[] {5, 4, 6, 7}, new Vector3f(1, 0, 0)),
+        new Face(new int[] {1, 0, 4, 5}, new Vector3f(0, -1, 0)),
+        new Face(new int[] {2, 3, 7, 6}, new Vector3f(0, 1, 0)),
+        new Face(new int[] {4, 0, 2, 6}, new Vector3f(0, 0, -1)),
+        new Face(new int[] {1, 5, 7, 3}, new Vector3f(0, 0, 1))
     };
-    private static final float[][] VANILLA_UV = {
-            {0, 1}, {1, 1}, {1, 0}, {0, 0}
-    };
+    private static final float[][] VANILLA_UV = {{0, 1}, {1, 1}, {1, 0}, {0, 0}};
 
     private final BakedModel delegate;
     private final Map<Direction, Mesh> meshes;
@@ -73,17 +70,21 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
 
     public static void register() {
         PreparableModelLoadingPlugin.register(
-                (resourceManager, executor) -> CompletableFuture.supplyAsync(
-                        () -> loadCubes(resourceManager), executor),
+                (resourceManager, executor) ->
+                        CompletableFuture.supplyAsync(() -> loadCubes(resourceManager), executor),
                 (cubes, context) -> {
-                    context.modifyModelAfterBake().register((model, bakeContext) ->
-                            MODEL.equals(bakeContext.id())
-                                    ? bake(model, bakeContext.baker(), cubes)
-                                    : model);
-                    context.modifyBlockModelAfterBake().register((model, bakeContext) ->
-                            BLOCK.equals(bakeContext.id().id())
-                                    ? bake(model, bakeContext.baker(), cubes)
-                                    : model);
+                    context.modifyModelAfterBake()
+                            .register(
+                                    (model, bakeContext) ->
+                                            MODEL.equals(bakeContext.id())
+                                                    ? bake(model, bakeContext.baker(), cubes)
+                                                    : model);
+                    context.modifyBlockModelAfterBake()
+                            .register(
+                                    (model, bakeContext) ->
+                                            BLOCK.equals(bakeContext.id().id())
+                                                    ? bake(model, bakeContext.baker(), cubes)
+                                                    : model);
                 });
     }
 
@@ -92,7 +93,8 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
             return model;
         }
 
-        TextureAtlasSprite sprite = baker.sprites().get(new Material(TextureAtlas.LOCATION_BLOCKS, TEXTURE));
+        TextureAtlasSprite sprite =
+                baker.sprites().get(new Material(TextureAtlas.LOCATION_BLOCKS, TEXTURE));
         Renderer renderer = Renderer.get();
         RenderMaterial material = renderer.materialFinder().blendMode(BlendMode.SOLID).find();
         Map<Direction, Mesh> meshes = new EnumMap<>(Direction.class);
@@ -110,12 +112,13 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
             Direction direction) {
         MutableMesh mutableMesh = renderer.mutableMesh();
         QuadEmitter emitter = mutableMesh.emitter();
-        int quarterTurns = switch (direction) {
-            case EAST -> 1;
-            case SOUTH -> 2;
-            case WEST -> 3;
-            default -> 0;
-        };
+        int quarterTurns =
+                switch (direction) {
+                    case EAST -> 1;
+                    case SOUTH -> 2;
+                    case WEST -> 3;
+                    default -> 0;
+                };
 
         for (Cube cube : cubes) {
             Vector3f[] corners = cube.corners();
@@ -135,11 +138,16 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
 
                 MeshUvHandedness.requireVanilla(
                         GEOMETRY,
-                        positions[0], VANILLA_UV[0][0], VANILLA_UV[0][1],
-                        positions[1], VANILLA_UV[1][0], VANILLA_UV[1][1],
-                        positions[2], VANILLA_UV[2][0], VANILLA_UV[2][1]);
-                emitter
-                        .spriteBake(sprite, MutableQuadView.BAKE_NORMALIZED)
+                        positions[0],
+                        VANILLA_UV[0][0],
+                        VANILLA_UV[0][1],
+                        positions[1],
+                        VANILLA_UV[1][0],
+                        VANILLA_UV[1][1],
+                        positions[2],
+                        VANILLA_UV[2][0],
+                        VANILLA_UV[2][1]);
+                emitter.spriteBake(sprite, MutableQuadView.BAKE_NORMALIZED)
                         .material(material)
                         .nominalFace(Direction.getApproximateNearest(normal.x, normal.y, normal.z))
                         .cullFace(null)
@@ -156,12 +164,14 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
                 JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
                 JsonArray geometries = root.getAsJsonArray("minecraft:geometry");
                 if (geometries.size() != 1) {
-                    throw new IllegalStateException("Throne geometry must contain exactly one model: " + GEOMETRY);
+                    throw new IllegalStateException(
+                            "Throne geometry must contain exactly one model: " + GEOMETRY);
                 }
 
                 JsonArray bones = geometries.get(0).getAsJsonObject().getAsJsonArray("bones");
                 if (bones.size() != 1) {
-                    throw new IllegalStateException("Throne geometry must contain exactly one root bone: " + GEOMETRY);
+                    throw new IllegalStateException(
+                            "Throne geometry must contain exactly one root bone: " + GEOMETRY);
                 }
                 JsonObject bone = bones.get(0).getAsJsonObject();
                 requireZeroTransform(bone, "pivot");
@@ -171,11 +181,12 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
                 List<Cube> cubes = new ArrayList<>(rawCubes.size());
                 for (JsonElement element : rawCubes) {
                     JsonObject cube = element.getAsJsonObject();
-                    cubes.add(new Cube(
-                            vector(cube, "origin"),
-                            vector(cube, "size"),
-                            vectorOrZero(cube, "pivot"),
-                            vectorOrZero(cube, "rotation")));
+                    cubes.add(
+                            new Cube(
+                                    vector(cube, "origin"),
+                                    vector(cube, "size"),
+                                    vectorOrZero(cube, "pivot"),
+                                    vectorOrZero(cube, "rotation")));
                 }
                 if (cubes.isEmpty()) {
                     throw new IllegalStateException("Throne geometry is empty: " + GEOMETRY);
@@ -183,21 +194,24 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
                 return List.copyOf(cubes);
             }
         } catch (IOException exception) {
-            throw new IllegalStateException("Unable to load throne geometry " + GEOMETRY, exception);
+            throw new IllegalStateException(
+                    "Unable to load throne geometry " + GEOMETRY, exception);
         }
     }
 
     private static void requireZeroTransform(JsonObject object, String member) {
         Vector3f value = vectorOrZero(object, member);
         if (value.lengthSquared() > 1.0e-12f) {
-            throw new IllegalStateException("Unsupported throne root bone " + member + " in " + GEOMETRY);
+            throw new IllegalStateException(
+                    "Unsupported throne root bone " + member + " in " + GEOMETRY);
         }
     }
 
     private static Vector3f vector(JsonObject object, String member) {
         JsonArray value = object.getAsJsonArray(member);
         if (value == null || value.size() != 3) {
-            throw new IllegalStateException("Missing three-component " + member + " in " + GEOMETRY);
+            throw new IllegalStateException(
+                    "Missing three-component " + member + " in " + GEOMETRY);
         }
         return new Vector3f(value(value, 0), value(value, 1), value(value, 2));
     }
@@ -231,9 +245,7 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(
-            @Nullable BlockState state,
-            @Nullable Direction side,
-            RandomSource random) {
+            @Nullable BlockState state, @Nullable Direction side, RandomSource random) {
         return List.of();
     }
 
@@ -275,9 +287,10 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
             BlockPos pos,
             Supplier<RandomSource> randomSupplier,
             Predicate<@Nullable Direction> cullTest) {
-        Direction direction = state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)
-                ? state.getValue(BlockStateProperties.HORIZONTAL_FACING)
-                : Direction.NORTH;
+        Direction direction =
+                state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)
+                        ? state.getValue(BlockStateProperties.HORIZONTAL_FACING)
+                        : Direction.NORTH;
         this.meshes.get(direction).outputTo(emitter);
     }
 
@@ -286,15 +299,14 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
         this.meshes.get(Direction.NORTH).outputTo(emitter);
     }
 
-    private record Face(int[] corners, Vector3f normal) {
-    }
+    private record Face(int[] corners, Vector3f normal) {}
 
     private record Cube(Vector3f origin, Vector3f size, Vector3f pivot, Vector3f authoredRotation) {
         Quaternionf rotation() {
             return new Quaternionf()
-                    .rotationZ((float)Math.toRadians(this.authoredRotation.x))
-                    .rotateY((float)Math.toRadians(-this.authoredRotation.y))
-                    .rotateX((float)Math.toRadians(-this.authoredRotation.z));
+                    .rotationZ((float) Math.toRadians(this.authoredRotation.x))
+                    .rotateY((float) Math.toRadians(-this.authoredRotation.y))
+                    .rotateX((float) Math.toRadians(-this.authoredRotation.z));
         }
 
         Vector3f[] corners() {
@@ -305,20 +317,22 @@ public final class ThroneBakedModel implements BakedModel, FabricBakedModel {
             float minZ = this.origin.z / 16.0f;
             float maxZ = minZ + this.size.z / 16.0f;
             return new Vector3f[] {
-                    new Vector3f(minX, minY, minZ),
-                    new Vector3f(minX, minY, maxZ),
-                    new Vector3f(minX, maxY, minZ),
-                    new Vector3f(minX, maxY, maxZ),
-                    new Vector3f(maxX, minY, minZ),
-                    new Vector3f(maxX, minY, maxZ),
-                    new Vector3f(maxX, maxY, minZ),
-                    new Vector3f(maxX, maxY, maxZ)
+                new Vector3f(minX, minY, minZ),
+                new Vector3f(minX, minY, maxZ),
+                new Vector3f(minX, maxY, minZ),
+                new Vector3f(minX, maxY, maxZ),
+                new Vector3f(maxX, minY, minZ),
+                new Vector3f(maxX, minY, maxZ),
+                new Vector3f(maxX, maxY, minZ),
+                new Vector3f(maxX, maxY, maxZ)
             };
         }
 
         Vector3f transform(Vector3f source) {
-            Vector3f convertedPivot = new Vector3f(-this.pivot.x, this.pivot.y, this.pivot.z).div(16.0f);
-            return this.rotation().transform(new Vector3f(source).sub(convertedPivot))
+            Vector3f convertedPivot =
+                    new Vector3f(-this.pivot.x, this.pivot.y, this.pivot.z).div(16.0f);
+            return this.rotation()
+                    .transform(new Vector3f(source).sub(convertedPivot))
                     .add(convertedPivot)
                     .add(0.5f, 0, 0.5f);
         }

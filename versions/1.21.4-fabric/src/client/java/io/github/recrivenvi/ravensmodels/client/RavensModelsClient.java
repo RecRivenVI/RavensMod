@@ -1,7 +1,7 @@
 package io.github.recrivenvi.ravensmodels.client;
 
-import net.fabricmc.api.ClientModInitializer;
 import io.github.recrivenvi.ravensmodels.ModContent;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 

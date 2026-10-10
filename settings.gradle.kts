@@ -1,20 +1,22 @@
 pluginManagement {
-    includeBuild("gradle/configuration") {
-        name = "raven-configuration"
-    }
+    includeBuild("components/configuration")
+    includeBuild("components/conventions")
+    includeBuild("components/compliance")
     repositories {
-        mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.neoforged.net/releases")
         maven("https://maven.fabricmc.net/")
     }
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    id("io.github.recrivenvi.configuration")
+    id("io.github.recrivenvi.conventions")
+    id("io.github.recrivenvi.compliance")
 }
 
 rootProject.name = "RavensModels"
 
-include(":version:1.21.4-fabric")
-project(":version").projectDir = file("versions")
-project(":version:1.21.4-fabric").projectDir = file("versions/1.21.4-fabric")
+targets {
+    register("1.21.4-fabric")
+}

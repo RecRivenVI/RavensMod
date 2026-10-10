@@ -39,12 +39,13 @@ public final class G3StairBlock extends StairBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return super.getStateForPlacement(new BlockPlaceContext(context) {
-            @Override
-            public Direction getHorizontalDirection() {
-                return context.getHorizontalDirection().getOpposite();
-            }
-        });
+        return super.getStateForPlacement(
+                new BlockPlaceContext(context) {
+                    @Override
+                    public Direction getHorizontalDirection() {
+                        return context.getHorizontalDirection().getOpposite();
+                    }
+                });
     }
 
     @Override
@@ -66,20 +67,17 @@ public final class G3StairBlock extends StairBlock {
         StairsShape shape = state.getValue(SHAPE);
 
         return switch (shape) {
-            case INNER_LEFT -> Shapes.or(
-                    horizontal,
-                    cornerPost(primarySide, facing.getClockWise()));
-            case INNER_RIGHT -> Shapes.or(
-                    horizontal,
-                    cornerPost(primarySide, facing.getCounterClockWise()));
-            case OUTER_LEFT -> Shapes.or(
-                    horizontal,
-                    sidePlate(primarySide),
-                    sidePlate(facing.getClockWise()));
-            case OUTER_RIGHT -> Shapes.or(
-                    horizontal,
-                    sidePlate(primarySide),
-                    sidePlate(facing.getCounterClockWise()));
+            case INNER_LEFT ->
+                    Shapes.or(horizontal, cornerPost(primarySide, facing.getClockWise()));
+            case INNER_RIGHT ->
+                    Shapes.or(horizontal, cornerPost(primarySide, facing.getCounterClockWise()));
+            case OUTER_LEFT ->
+                    Shapes.or(horizontal, sidePlate(primarySide), sidePlate(facing.getClockWise()));
+            case OUTER_RIGHT ->
+                    Shapes.or(
+                            horizontal,
+                            sidePlate(primarySide),
+                            sidePlate(facing.getCounterClockWise()));
             default -> Shapes.or(horizontal, sidePlate(primarySide));
         };
     }
@@ -90,7 +88,8 @@ public final class G3StairBlock extends StairBlock {
             case SOUTH -> SOUTH_PLATE;
             case WEST -> WEST_PLATE;
             case EAST -> EAST_PLATE;
-            default -> throw new IllegalArgumentException("G3 side must be horizontal: " + direction);
+            default ->
+                    throw new IllegalArgumentException("G3 side must be horizontal: " + direction);
         };
     }
 

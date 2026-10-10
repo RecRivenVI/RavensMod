@@ -1,5 +1,7 @@
 {
-  "variants": {
-    "": { "model": "ravensmodels:block/white_sphere" }
-  }
+    "variants": {
+        "": {
+            "model": "ravensmodels:block/white_sphere"
+        }
+    }
 }

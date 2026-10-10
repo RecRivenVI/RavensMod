@@ -20,14 +20,18 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class HorizontalFacingBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
-    private static final MapCodec<HorizontalFacingBlock> CODEC = simpleCodec(HorizontalFacingBlock::new);
+public class HorizontalFacingBlock extends HorizontalDirectionalBlock
+        implements SimpleWaterloggedBlock {
+    private static final MapCodec<HorizontalFacingBlock> CODEC =
+            simpleCodec(HorizontalFacingBlock::new);
 
     public HorizontalFacingBlock(Properties properties) {
         super(properties);
-        registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(BlockStateProperties.WATERLOGGED, false));
+        registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(FACING, Direction.NORTH)
+                        .setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
     @Override
@@ -41,7 +45,8 @@ public class HorizontalFacingBlock extends HorizontalDirectionalBlock implements
                 .setValue(FACING, context.getHorizontalDirection().getOpposite())
                 .setValue(
                         BlockStateProperties.WATERLOGGED,
-                        context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                        context.getLevel().getFluidState(context.getClickedPos()).getType()
+                                == Fluids.WATER);
     }
 
     @Override
@@ -57,7 +62,8 @@ public class HorizontalFacingBlock extends HorizontalDirectionalBlock implements
         if (state.getValue(BlockStateProperties.WATERLOGGED)) {
             tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
+        return super.updateShape(
+                state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override
@@ -73,19 +79,27 @@ public class HorizontalFacingBlock extends HorizontalDirectionalBlock implements
     }
 
     protected static VoxelShape rotateShape(VoxelShape north, Direction facing) {
-        int turns = switch (facing) {
-            case EAST -> 1;
-            case SOUTH -> 2;
-            case WEST -> 3;
-            default -> 0;
-        };
+        int turns =
+                switch (facing) {
+                    case EAST -> 1;
+                    case SOUTH -> 2;
+                    case WEST -> 3;
+                    default -> 0;
+                };
         VoxelShape result = north;
         for (int turn = 0; turn < turns; turn++) {
             VoxelShape rotated = Shapes.empty();
             for (AABB box : result.toAabbs()) {
-                rotated = Shapes.or(rotated, Shapes.box(
-                        1 - box.maxZ, box.minY, box.minX,
-                        1 - box.minZ, box.maxY, box.maxX));
+                rotated =
+                        Shapes.or(
+                                rotated,
+                                Shapes.box(
+                                        1 - box.maxZ,
+                                        box.minY,
+                                        box.minX,
+                                        1 - box.minZ,
+                                        box.maxY,
+                                        box.maxX));
             }
             result = rotated;
         }

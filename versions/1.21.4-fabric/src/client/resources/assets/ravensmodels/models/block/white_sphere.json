@@ -1,7 +1,7 @@
 {
-  "parent": "ravensmodels:block/cube_all_experiment",
-  "textures": {
-    "all": "ravensmodels:block/white_sphere_atlas",
-    "particle": "ravensmodels:block/white_sphere_atlas"
-  }
+    "parent": "ravensmodels:block/cube_all_experiment",
+    "textures": {
+        "all": "ravensmodels:block/white_sphere_atlas",
+        "particle": "ravensmodels:block/white_sphere_atlas"
+    }
 }

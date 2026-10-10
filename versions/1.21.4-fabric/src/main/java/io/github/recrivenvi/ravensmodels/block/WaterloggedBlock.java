@@ -21,7 +21,8 @@ public final class WaterloggedBlock extends Block implements SimpleWaterloggedBl
 
     public WaterloggedBlock(Properties properties) {
         super(properties);
-        registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
+        registerDefaultState(
+                this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
     @Override
@@ -31,9 +32,11 @@ public final class WaterloggedBlock extends Block implements SimpleWaterloggedBl
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(
-                BlockStateProperties.WATERLOGGED,
-                context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+        return defaultBlockState()
+                .setValue(
+                        BlockStateProperties.WATERLOGGED,
+                        context.getLevel().getFluidState(context.getClickedPos()).getType()
+                                == Fluids.WATER);
     }
 
     @Override
@@ -49,7 +52,8 @@ public final class WaterloggedBlock extends Block implements SimpleWaterloggedBl
         if (state.getValue(BlockStateProperties.WATERLOGGED)) {
             tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
+        return super.updateShape(
+                state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override

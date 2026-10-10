@@ -1,5 +1,7 @@
 {
-  "variants": {
-    "": { "model": "ravensmodels:block/mirror_sphere" }
-  }
+    "variants": {
+        "": {
+            "model": "ravensmodels:block/mirror_sphere"
+        }
+    }
 }

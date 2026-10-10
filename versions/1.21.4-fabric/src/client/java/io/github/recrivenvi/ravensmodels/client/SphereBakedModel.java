@@ -5,6 +5,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.recrivenvi.ravensmodels.RavensModels;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
@@ -32,14 +39,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 /** A reload-safe, chunk-baked sphere mesh shared by the white and mirror materials. */
 public final class SphereBakedModel implements BakedModel, FabricBakedModel {
     private static final ResourceLocation GEOMETRY = id("models/mesh/sphere.json");
@@ -60,43 +59,62 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
 
     public static void register() {
         PreparableModelLoadingPlugin.register(
-                (resourceManager, executor) -> CompletableFuture.supplyAsync(
-                        () -> loadGeometry(resourceManager), executor),
+                (resourceManager, executor) ->
+                        CompletableFuture.supplyAsync(
+                                () -> loadGeometry(resourceManager), executor),
                 (geometry, context) -> {
-                    context.modifyModelAfterBake().register((model, bakeContext) -> {
-                        ResourceLocation id = bakeContext.id();
-                        if (MIRROR_MODEL.equals(id)) {
-                            return bake(model, bakeContext.baker(), geometry, MIRROR_TEXTURE);
-                        }
-                        if (WHITE_MODEL.equals(id)) {
-                            return bake(model, bakeContext.baker(), geometry, WHITE_TEXTURE);
-                        }
-                        return model;
-                    });
+                    context.modifyModelAfterBake()
+                            .register(
+                                    (model, bakeContext) -> {
+                                        ResourceLocation id = bakeContext.id();
+                                        if (MIRROR_MODEL.equals(id)) {
+                                            return bake(
+                                                    model,
+                                                    bakeContext.baker(),
+                                                    geometry,
+                                                    MIRROR_TEXTURE);
+                                        }
+                                        if (WHITE_MODEL.equals(id)) {
+                                            return bake(
+                                                    model,
+                                                    bakeContext.baker(),
+                                                    geometry,
+                                                    WHITE_TEXTURE);
+                                        }
+                                        return model;
+                                    });
 
-                    context.modifyBlockModelAfterBake().register((model, bakeContext) -> {
-                        ResourceLocation id = bakeContext.id().id();
-                        if (MIRROR_BLOCK.equals(id)) {
-                            return bake(model, bakeContext.baker(), geometry, MIRROR_TEXTURE);
-                        }
-                        if (WHITE_BLOCK.equals(id)) {
-                            return bake(model, bakeContext.baker(), geometry, WHITE_TEXTURE);
-                        }
-                        return model;
-                    });
+                    context.modifyBlockModelAfterBake()
+                            .register(
+                                    (model, bakeContext) -> {
+                                        ResourceLocation id = bakeContext.id().id();
+                                        if (MIRROR_BLOCK.equals(id)) {
+                                            return bake(
+                                                    model,
+                                                    bakeContext.baker(),
+                                                    geometry,
+                                                    MIRROR_TEXTURE);
+                                        }
+                                        if (WHITE_BLOCK.equals(id)) {
+                                            return bake(
+                                                    model,
+                                                    bakeContext.baker(),
+                                                    geometry,
+                                                    WHITE_TEXTURE);
+                                        }
+                                        return model;
+                                    });
                 });
     }
 
     private static BakedModel bake(
-            BakedModel model,
-            ModelBaker baker,
-            List<MeshQuad> geometry,
-            ResourceLocation texture) {
+            BakedModel model, ModelBaker baker, List<MeshQuad> geometry, ResourceLocation texture) {
         if (model instanceof SphereBakedModel) {
             return model;
         }
 
-        TextureAtlasSprite sprite = baker.sprites().get(new Material(TextureAtlas.LOCATION_BLOCKS, texture));
+        TextureAtlasSprite sprite =
+                baker.sprites().get(new Material(TextureAtlas.LOCATION_BLOCKS, texture));
         Renderer renderer = Renderer.get();
         MutableMesh mutableMesh = renderer.mutableMesh();
         QuadEmitter emitter = mutableMesh.emitter();
@@ -111,8 +129,7 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
                 emitter.color(vertexIndex, 0xFFFFFFFF);
             }
 
-            emitter
-                    .spriteBake(sprite, MutableQuadView.BAKE_NORMALIZED)
+            emitter.spriteBake(sprite, MutableQuadView.BAKE_NORMALIZED)
                     .material(material)
                     .nominalFace(quad.nominalFace())
                     .cullFace(null)
@@ -134,13 +151,19 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
 
                 for (int index = 0; index < rawVertices.size(); index++) {
                     JsonArray vertex = rawVertices.get(index).getAsJsonArray();
-                    positions[index] = new Vector3f(value(vertex, 0), value(vertex, 1), value(vertex, 2));
+                    positions[index] =
+                            new Vector3f(value(vertex, 0), value(vertex, 1), value(vertex, 2));
                 }
 
                 JsonArray rawQuads = root.getAsJsonArray("quads");
                 List<MeshQuad> quads = new ArrayList<>(rawQuads.size());
                 for (JsonElement element : rawQuads) {
-                    quads.add(readQuad(element.getAsJsonObject(), positions, textureWidth, textureHeight));
+                    quads.add(
+                            readQuad(
+                                    element.getAsJsonObject(),
+                                    positions,
+                                    textureWidth,
+                                    textureHeight));
                 }
 
                 if (positions.length == 0 || quads.isEmpty()) {
@@ -149,15 +172,13 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
                 return List.copyOf(quads);
             }
         } catch (IOException exception) {
-            throw new IllegalStateException("Unable to load sphere geometry " + GEOMETRY, exception);
+            throw new IllegalStateException(
+                    "Unable to load sphere geometry " + GEOMETRY, exception);
         }
     }
 
     private static MeshQuad readQuad(
-            JsonObject quad,
-            Vector3f[] positions,
-            float textureWidth,
-            float textureHeight) {
+            JsonObject quad, Vector3f[] positions, float textureWidth, float textureHeight) {
         JsonArray indices = quad.getAsJsonArray("vertices");
         JsonArray rawUvs = quad.getAsJsonArray("uv");
         MeshVertex[] vertices = new MeshVertex[4];
@@ -165,21 +186,35 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
             Vector3f position = positions[indices.get(index).getAsInt()];
             JsonArray uv = rawUvs.get(index).getAsJsonArray();
             Vector3f normal = new Vector3f(position).sub(0.5f, 0.5f, 0.5f).normalize();
-            vertices[index] = new MeshVertex(
-                    position.x, position.y, position.z,
-                    value(uv, 0) / textureWidth, value(uv, 1) / textureHeight,
-                    normal.x, normal.y, normal.z);
+            vertices[index] =
+                    new MeshVertex(
+                            position.x,
+                            position.y,
+                            position.z,
+                            value(uv, 0) / textureWidth,
+                            value(uv, 1) / textureHeight,
+                            normal.x,
+                            normal.y,
+                            normal.z);
         }
 
-        Vector3f edge1 = new Vector3f(positions[indices.get(1).getAsInt()])
-                .sub(positions[indices.get(0).getAsInt()]);
-        Vector3f edge2 = new Vector3f(positions[indices.get(2).getAsInt()])
-                .sub(positions[indices.get(0).getAsInt()]);
+        Vector3f edge1 =
+                new Vector3f(positions[indices.get(1).getAsInt()])
+                        .sub(positions[indices.get(0).getAsInt()]);
+        Vector3f edge2 =
+                new Vector3f(positions[indices.get(2).getAsInt()])
+                        .sub(positions[indices.get(0).getAsInt()]);
         MeshUvHandedness.requireVanilla(
                 GEOMETRY,
-                positions[indices.get(0).getAsInt()], vertices[0].u, vertices[0].v,
-                positions[indices.get(1).getAsInt()], vertices[1].u, vertices[1].v,
-                positions[indices.get(2).getAsInt()], vertices[2].u, vertices[2].v);
+                positions[indices.get(0).getAsInt()],
+                vertices[0].u,
+                vertices[0].v,
+                positions[indices.get(1).getAsInt()],
+                vertices[1].u,
+                vertices[1].v,
+                positions[indices.get(2).getAsInt()],
+                vertices[2].u,
+                vertices[2].v);
         Vector3f faceNormal = edge1.cross(edge2);
         if (faceNormal.lengthSquared() < 1.0e-12f) {
             edge1.set(positions[indices.get(3).getAsInt()])
@@ -189,7 +224,8 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
             faceNormal.set(edge1.cross(edge2));
         }
         faceNormal.normalize();
-        Direction nominalFace = Direction.getApproximateNearest(faceNormal.x, faceNormal.y, faceNormal.z);
+        Direction nominalFace =
+                Direction.getApproximateNearest(faceNormal.x, faceNormal.y, faceNormal.z);
         return new MeshQuad(vertices, nominalFace);
     }
 
@@ -203,9 +239,7 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(
-            @Nullable BlockState state,
-            @Nullable Direction side,
-            RandomSource random) {
+            @Nullable BlockState state, @Nullable Direction side, RandomSource random) {
         return List.of();
     }
 
@@ -255,8 +289,7 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
         this.mesh.outputTo(emitter);
     }
 
-    private record MeshQuad(MeshVertex[] vertices, Direction nominalFace) {
-    }
+    private record MeshQuad(MeshVertex[] vertices, Direction nominalFace) {}
 
     private record MeshVertex(
             float x,
@@ -266,6 +299,5 @@ public final class SphereBakedModel implements BakedModel, FabricBakedModel {
             float v,
             float normalX,
             float normalY,
-            float normalZ) {
-    }
+            float normalZ) {}
 }

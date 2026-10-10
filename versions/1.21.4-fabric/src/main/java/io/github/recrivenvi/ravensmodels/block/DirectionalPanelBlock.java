@@ -21,8 +21,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public final class DirectionalPanelBlock extends DirectionalBlock implements SimpleWaterloggedBlock {
-    private static final MapCodec<DirectionalPanelBlock> CODEC = simpleCodec(DirectionalPanelBlock::new);
+public final class DirectionalPanelBlock extends DirectionalBlock
+        implements SimpleWaterloggedBlock {
+    private static final MapCodec<DirectionalPanelBlock> CODEC =
+            simpleCodec(DirectionalPanelBlock::new);
 
     private static final VoxelShape NORTH_SHAPE = box(0, 0, 15, 16, 16, 16);
     private static final VoxelShape SOUTH_SHAPE = box(0, 0, 0, 16, 16, 1);
@@ -35,9 +37,11 @@ public final class DirectionalPanelBlock extends DirectionalBlock implements Sim
 
     public DirectionalPanelBlock(Properties properties) {
         super(properties);
-        registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(BlockStateProperties.WATERLOGGED, false));
+        registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(FACING, Direction.NORTH)
+                        .setValue(BlockStateProperties.WATERLOGGED, false));
         this.shapes = getShapeForEachState(DirectionalPanelBlock::shapeForState);
     }
 
@@ -52,7 +56,8 @@ public final class DirectionalPanelBlock extends DirectionalBlock implements Sim
                 .setValue(FACING, context.getNearestLookingDirection().getOpposite())
                 .setValue(
                         BlockStateProperties.WATERLOGGED,
-                        context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER);
+                        context.getLevel().getFluidState(context.getClickedPos()).getType()
+                                == Fluids.WATER);
     }
 
     @Override
@@ -68,7 +73,8 @@ public final class DirectionalPanelBlock extends DirectionalBlock implements Sim
         if (state.getValue(BlockStateProperties.WATERLOGGED)) {
             tickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
+        return super.updateShape(
+                state, level, tickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override

@@ -1,7 +1,7 @@
 {
-  "parent": "ravensmodels:block/cube_all_experiment",
-  "textures": {
-    "all": "ravensmodels:block/mirror_block",
-    "particle": "ravensmodels:block/mirror_block"
-  }
+    "parent": "ravensmodels:block/cube_all_experiment",
+    "textures": {
+        "all": "ravensmodels:block/mirror_block",
+        "particle": "ravensmodels:block/mirror_block"
+    }
 }

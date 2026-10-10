@@ -1,6 +1,6 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "ravensmodels:block/g3_connector"
-  }
+    "model": {
+        "type": "minecraft:model",
+        "model": "ravensmodels:block/g3_connector"
+    }
 }

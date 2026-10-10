@@ -34,10 +34,11 @@ bin/
 /instances/**
 !/instances/**/
 /local.properties
+/local.toml
+/runs/
 
 # Validation runtime data; keep directories traversable for exact file allowlists.
-/validations/*/instance/**
-!/validations/*/instance/**/
+/validations/*/instance/
 
 # java
 

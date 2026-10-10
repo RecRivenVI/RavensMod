@@ -1,0 +1,5 @@
+[client]
+player-name = "DevPlayer"
+
+[client-multiplayer]
+player-name = "DevPlayer2"

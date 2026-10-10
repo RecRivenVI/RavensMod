@@ -1,6 +1,6 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "ravensmodels:block/white_sphere"
-  }
+    "model": {
+        "type": "minecraft:model",
+        "model": "ravensmodels:block/white_sphere"
+    }
 }

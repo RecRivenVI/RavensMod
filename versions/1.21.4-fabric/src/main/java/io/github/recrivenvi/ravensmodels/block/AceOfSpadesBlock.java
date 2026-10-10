@@ -15,8 +15,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public final class AceOfSpadesBlock extends HorizontalFacingBlock {
-    public static final EnumProperty<AttachFace> FACE = EnumProperty.create(
-            "face", AttachFace.class, AttachFace.FLOOR, AttachFace.WALL);
+    public static final EnumProperty<AttachFace> FACE =
+            EnumProperty.create("face", AttachFace.class, AttachFace.FLOOR, AttachFace.WALL);
     public static final float DISPLAY_LENGTH = 2.0f;
     private static final MapCodec<AceOfSpadesBlock> CODEC = simpleCodec(AceOfSpadesBlock::new);
     // Selection/collision belongs to one cell; only the displayed geometry overhangs it.
@@ -27,8 +27,14 @@ public final class AceOfSpadesBlock extends HorizontalFacingBlock {
     public AceOfSpadesBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(FACE, AttachFace.FLOOR));
-        this.shapes = getShapeForEachState(state -> rotateShape(
-                state.getValue(FACE) == AttachFace.FLOOR ? FLOOR_SHAPE : WALL_SHAPE, state.getValue(FACING)));
+        this.shapes =
+                getShapeForEachState(
+                        state ->
+                                rotateShape(
+                                        state.getValue(FACE) == AttachFace.FLOOR
+                                                ? FLOOR_SHAPE
+                                                : WALL_SHAPE,
+                                        state.getValue(FACING)));
     }
 
     @Override
@@ -47,12 +53,14 @@ public final class AceOfSpadesBlock extends HorizontalFacingBlock {
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getShape(
+            BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return this.shapes.get(state);
     }
 
     @Override
-    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected VoxelShape getCollisionShape(
+            BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return this.shapes.get(state);
     }
 

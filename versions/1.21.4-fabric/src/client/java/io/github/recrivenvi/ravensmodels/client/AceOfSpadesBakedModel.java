@@ -6,6 +6,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.recrivenvi.ravensmodels.RavensModels;
 import io.github.recrivenvi.ravensmodels.block.AceOfSpadesBlock;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
@@ -33,17 +43,6 @@ import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public final class AceOfSpadesBakedModel implements BakedModel, FabricBakedModel {
     private static final ResourceLocation MODEL = id("item/ace_of_spades");
@@ -79,38 +78,68 @@ public final class AceOfSpadesBakedModel implements BakedModel, FabricBakedModel
         Vector3f center = new Vector3f(min).add(max).mul(0.5f);
         List<List<Vertex>> flat = new ArrayList<>();
         for (List<Vertex> triangle : item) {
-            flat.add(triangle.stream().map(vertex -> new Vertex(new Vector3f(
-                    0.5f + (center.z - vertex.position().z) * scale,
-                    (max.x - vertex.position().x) * scale,
-                    0.5f + (vertex.position().y - center.y) * scale), vertex.u(), vertex.v())).toList());
+            flat.add(
+                    triangle.stream()
+                            .map(
+                                    vertex ->
+                                            new Vertex(
+                                                    new Vector3f(
+                                                            0.5f
+                                                                    + (center.z
+                                                                                    - vertex
+                                                                                            .position()
+                                                                                            .z)
+                                                                            * scale,
+                                                            (max.x - vertex.position().x) * scale,
+                                                            0.5f
+                                                                    + (vertex.position().y
+                                                                                    - center.y)
+                                                                            * scale),
+                                                    vertex.u(),
+                                                    vertex.v()))
+                            .toList());
         }
         Map<StateKey, Mesh> world = new HashMap<>();
         for (AttachFace face : AceOfSpadesBlock.FACE.getPossibleValues()) {
             for (Direction facing : Direction.Plane.HORIZONTAL) {
                 List<List<Vertex>> rotated = new ArrayList<>();
                 for (List<Vertex> polygon : flat) {
-                    rotated.add(polygon.stream().map(vertex -> {
-                        Vector3f p = new Vector3f(vertex.position());
-                        if (face == AttachFace.WALL) {
-                            // Fold the floor display upright against the support face at Z=1.
-                            p.set(p.x, p.z, 1 - p.y);
-                        }
-                        return new Vertex(rotate(p, facing), vertex.u(), vertex.v());
-                    }).toList());
+                    rotated.add(
+                            polygon.stream()
+                                    .map(
+                                            vertex -> {
+                                                Vector3f p = new Vector3f(vertex.position());
+                                                if (face == AttachFace.WALL) {
+                                                    // Fold the floor display upright against the
+                                                    // support face at Z=1.
+                                                    p.set(p.x, p.z, 1 - p.y);
+                                                }
+                                                return new Vertex(
+                                                        rotate(p, facing), vertex.u(), vertex.v());
+                                            })
+                                    .toList());
                 }
-                world.put(new StateKey(facing, face), bakeMesh(renderer, material, sprite, rotated));
+                world.put(
+                        new StateKey(facing, face), bakeMesh(renderer, material, sprite, rotated));
             }
         }
         return new Meshes(bakeMesh(renderer, material, sprite, item), Map.copyOf(world));
     }
 
     private static Mesh bakeMesh(
-            Renderer renderer, RenderMaterial material, TextureAtlasSprite sprite, List<List<Vertex>> polygons) {
+            Renderer renderer,
+            RenderMaterial material,
+            TextureAtlasSprite sprite,
+            List<List<Vertex>> polygons) {
         MutableMesh mesh = renderer.mutableMesh();
         QuadEmitter emitter = mesh.emitter();
         for (List<Vertex> polygon : polygons) {
-            Vector3f normal = new Vector3f(polygon.get(1).position()).sub(polygon.get(0).position())
-                    .cross(new Vector3f(polygon.get(2).position()).sub(polygon.get(0).position()));
+            Vector3f normal =
+                    new Vector3f(polygon.get(1).position())
+                            .sub(polygon.get(0).position())
+                            .cross(
+                                    new Vector3f(polygon.get(2).position())
+                                            .sub(polygon.get(0).position()));
             if (normal.lengthSquared() < 1.0e-18f) {
                 continue;
             }
@@ -143,25 +172,44 @@ public final class AceOfSpadesBakedModel implements BakedModel, FabricBakedModel
 
     public static void register() {
         PreparableModelLoadingPlugin.register(
-                (resources, executor) -> CompletableFuture.supplyAsync(() -> loadGeometry(resources), executor),
+                (resources, executor) ->
+                        CompletableFuture.supplyAsync(() -> loadGeometry(resources), executor),
                 (triangles, context) -> {
                     Map<ResourceLocation, Meshes> cache = new ConcurrentHashMap<>();
-                    context.modifyModelAfterBake().register((model, bake) ->
-                            MODEL.equals(bake.id()) || BLOCK_MODEL.equals(bake.id())
-                                    ? wrap(model, bake.baker(), triangles, cache) : model);
-                    context.modifyBlockModelAfterBake().register((model, bake) ->
-                            id("ace_of_spades").equals(bake.id().id())
-                                    ? wrap(model, bake.baker(), triangles, cache) : model);
+                    context.modifyModelAfterBake()
+                            .register(
+                                    (model, bake) ->
+                                            MODEL.equals(bake.id()) || BLOCK_MODEL.equals(bake.id())
+                                                    ? wrap(model, bake.baker(), triangles, cache)
+                                                    : model);
+                    context.modifyBlockModelAfterBake()
+                            .register(
+                                    (model, bake) ->
+                                            id("ace_of_spades").equals(bake.id().id())
+                                                    ? wrap(model, bake.baker(), triangles, cache)
+                                                    : model);
                 });
     }
 
     private static BakedModel wrap(
-            BakedModel model, ModelBaker baker, List<Triangle> triangles, Map<ResourceLocation, Meshes> cache) {
+            BakedModel model,
+            ModelBaker baker,
+            List<Triangle> triangles,
+            Map<ResourceLocation, Meshes> cache) {
         if (model instanceof AceOfSpadesBakedModel) {
             return model;
         }
-        Meshes meshes = cache.computeIfAbsent(GEOMETRY, ignored -> buildMeshes(
-                baker.sprites().get(new Material(TextureAtlas.LOCATION_BLOCKS, MODEL)), triangles));
+        Meshes meshes =
+                cache.computeIfAbsent(
+                        GEOMETRY,
+                        ignored ->
+                                buildMeshes(
+                                        baker.sprites()
+                                                .get(
+                                                        new Material(
+                                                                TextureAtlas.LOCATION_BLOCKS,
+                                                                MODEL)),
+                                        triangles));
         return new AceOfSpadesBakedModel(model, meshes);
     }
 
@@ -175,7 +223,11 @@ public final class AceOfSpadesBakedModel implements BakedModel, FabricBakedModel
             Vector3f[] positions = new Vector3f[vertices.size()];
             for (int i = 0; i < positions.length; i++) {
                 JsonArray p = vertices.get(i).getAsJsonArray();
-                positions[i] = new Vector3f(p.get(0).getAsFloat(), p.get(1).getAsFloat(), p.get(2).getAsFloat());
+                positions[i] =
+                        new Vector3f(
+                                p.get(0).getAsFloat(),
+                                p.get(1).getAsFloat(),
+                                p.get(2).getAsFloat());
             }
             List<Triangle> triangles = new ArrayList<>();
             for (JsonElement element : root.getAsJsonArray("triangles")) {
@@ -189,8 +241,8 @@ public final class AceOfSpadesBakedModel implements BakedModel, FabricBakedModel
                     u[i] = uv.get(0).getAsFloat();
                     v[i] = uv.get(1).getAsFloat();
                 }
-                MeshUvHandedness.requireVanilla(GEOMETRY,
-                        p[0], u[0], v[0], p[1], u[1], v[1], p[2], u[2], v[2]);
+                MeshUvHandedness.requireVanilla(
+                        GEOMETRY, p[0], u[0], v[0], p[1], u[1], v[1], p[2], u[2], v[2]);
                 triangles.add(new Triangle(p, u, v));
             }
             return List.copyOf(triangles);
@@ -210,15 +262,24 @@ public final class AceOfSpadesBakedModel implements BakedModel, FabricBakedModel
 
     @Override
     public void emitBlockQuads(
-            QuadEmitter emitter, BlockAndTintGetter level, BlockState state, BlockPos pos,
-            Supplier<RandomSource> randomSupplier, Predicate<@Nullable Direction> cullTest) {
-        this.meshes.world().get(new StateKey(
-                state.getValue(BlockStateProperties.HORIZONTAL_FACING), state.getValue(AceOfSpadesBlock.FACE)))
+            QuadEmitter emitter,
+            BlockAndTintGetter level,
+            BlockState state,
+            BlockPos pos,
+            Supplier<RandomSource> randomSupplier,
+            Predicate<@Nullable Direction> cullTest) {
+        this.meshes
+                .world()
+                .get(
+                        new StateKey(
+                                state.getValue(BlockStateProperties.HORIZONTAL_FACING),
+                                state.getValue(AceOfSpadesBlock.FACE)))
                 .outputTo(emitter);
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state, @Nullable Direction side, RandomSource random) {
         return List.of();
     }
 
@@ -252,15 +313,11 @@ public final class AceOfSpadesBakedModel implements BakedModel, FabricBakedModel
         return this.delegate.getTransforms();
     }
 
-    private record Triangle(Vector3f[] positions, float[] u, float[] v) {
-    }
+    private record Triangle(Vector3f[] positions, float[] u, float[] v) {}
 
-    private record Vertex(Vector3f position, float u, float v) {
-    }
+    private record Vertex(Vector3f position, float u, float v) {}
 
-    private record StateKey(Direction facing, AttachFace face) {
-    }
+    private record StateKey(Direction facing, AttachFace face) {}
 
-    private record Meshes(Mesh item, Map<StateKey, Mesh> world) {
-    }
+    private record Meshes(Mesh item, Map<StateKey, Mesh> world) {}
 }

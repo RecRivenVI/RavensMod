@@ -6,6 +6,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.recrivenvi.ravensmodels.RavensModels;
 import io.github.recrivenvi.ravensmodels.block.PlasticChairBlock;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
@@ -33,18 +44,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 public final class DecorativeMeshBakedModel implements BakedModel, FabricBakedModel {
     private static final List<String> MODELS = List.of("david_bust", "plastic_chair");
 
@@ -58,75 +57,119 @@ public final class DecorativeMeshBakedModel implements BakedModel, FabricBakedMo
 
     public static void register() {
         PreparableModelLoadingPlugin.register(
-                (resources, executor) -> CompletableFuture.supplyAsync(() -> {
-                    Map<String, Geometry> result = new HashMap<>();
-                    for (String name : MODELS) {
-                        result.put(name, loadGeometry(resources, name));
-                    }
-                    return Map.copyOf(result);
-                }, executor),
+                (resources, executor) ->
+                        CompletableFuture.supplyAsync(
+                                () -> {
+                                    Map<String, Geometry> result = new HashMap<>();
+                                    for (String name : MODELS) {
+                                        result.put(name, loadGeometry(resources, name));
+                                    }
+                                    return Map.copyOf(result);
+                                },
+                                executor),
                 (geometry, context) -> {
-                    // A resource reload owns one mesh set per product, shared by its states and item.
+                    // A resource reload owns one mesh set per product, shared by its states and
+                    // item.
                     Map<String, Map<Direction, Mesh>> cache = new ConcurrentHashMap<>();
-                    context.modifyModelAfterBake().register((model, bake) -> {
-                        ResourceLocation modelId = bake.id();
-                        for (String name : MODELS) {
-                            if (id("block/" + name).equals(modelId)) {
-                                return wrap(model, bake.baker(), name, geometry.get(name), cache);
-                            }
-                        }
-                        return model;
-                    });
-                    context.modifyBlockModelAfterBake().register((model, bake) -> {
-                        ResourceLocation blockId = bake.id().id();
-                        for (String name : MODELS) {
-                            if (id(name).equals(blockId)) {
-                                return wrap(model, bake.baker(), name, geometry.get(name), cache);
-                            }
-                        }
-                        return model;
-                    });
+                    context.modifyModelAfterBake()
+                            .register(
+                                    (model, bake) -> {
+                                        ResourceLocation modelId = bake.id();
+                                        for (String name : MODELS) {
+                                            if (id("block/" + name).equals(modelId)) {
+                                                return wrap(
+                                                        model,
+                                                        bake.baker(),
+                                                        name,
+                                                        geometry.get(name),
+                                                        cache);
+                                            }
+                                        }
+                                        return model;
+                                    });
+                    context.modifyBlockModelAfterBake()
+                            .register(
+                                    (model, bake) -> {
+                                        ResourceLocation blockId = bake.id().id();
+                                        for (String name : MODELS) {
+                                            if (id(name).equals(blockId)) {
+                                                return wrap(
+                                                        model,
+                                                        bake.baker(),
+                                                        name,
+                                                        geometry.get(name),
+                                                        cache);
+                                            }
+                                        }
+                                        return model;
+                                    });
                 });
     }
 
     private static BakedModel wrap(
-            BakedModel model, ModelBaker baker, String name, Geometry geometry,
+            BakedModel model,
+            ModelBaker baker,
+            String name,
+            Geometry geometry,
             Map<String, Map<Direction, Mesh>> cache) {
         if (model instanceof DecorativeMeshBakedModel) {
             return model;
         }
-        Map<Direction, Mesh> meshes = cache.computeIfAbsent(name, ignored -> {
-            Renderer renderer = Renderer.get();
-            RenderMaterial material = renderer.materialFinder().blendMode(BlendMode.SOLID).find();
-            TextureAtlasSprite sprite = baker.sprites().get(
-                    new Material(TextureAtlas.LOCATION_BLOCKS, id("block/" + name + "_atlas")));
-            Map<Direction, Mesh> result = new EnumMap<>(Direction.class);
-            for (Direction direction : Direction.Plane.HORIZONTAL) {
-                float scale = name.equals("plastic_chair") ? PlasticChairBlock.MODEL_SCALE : 1.0f;
-                result.put(direction, buildMesh(renderer, material, sprite, geometry, direction, scale));
-            }
-            return Map.copyOf(result);
-        });
+        Map<Direction, Mesh> meshes =
+                cache.computeIfAbsent(
+                        name,
+                        ignored -> {
+                            Renderer renderer = Renderer.get();
+                            RenderMaterial material =
+                                    renderer.materialFinder().blendMode(BlendMode.SOLID).find();
+                            TextureAtlasSprite sprite =
+                                    baker.sprites()
+                                            .get(
+                                                    new Material(
+                                                            TextureAtlas.LOCATION_BLOCKS,
+                                                            id("block/" + name + "_atlas")));
+                            Map<Direction, Mesh> result = new EnumMap<>(Direction.class);
+                            for (Direction direction : Direction.Plane.HORIZONTAL) {
+                                float scale =
+                                        name.equals("plastic_chair")
+                                                ? PlasticChairBlock.MODEL_SCALE
+                                                : 1.0f;
+                                result.put(
+                                        direction,
+                                        buildMesh(
+                                                renderer, material, sprite, geometry, direction,
+                                                scale));
+                            }
+                            return Map.copyOf(result);
+                        });
         return new DecorativeMeshBakedModel(model, meshes);
     }
 
     private static Mesh buildMesh(
-            Renderer renderer, RenderMaterial material, TextureAtlasSprite sprite,
-            Geometry geometry, Direction direction, float scale) {
-        int turns = switch (direction) {
-            case EAST -> 1;
-            case SOUTH -> 2;
-            case WEST -> 3;
-            default -> 0;
-        };
+            Renderer renderer,
+            RenderMaterial material,
+            TextureAtlasSprite sprite,
+            Geometry geometry,
+            Direction direction,
+            float scale) {
+        int turns =
+                switch (direction) {
+                    case EAST -> 1;
+                    case SOUTH -> 2;
+                    case WEST -> 3;
+                    default -> 0;
+                };
         MutableMesh mesh = renderer.mutableMesh();
         QuadEmitter emitter = mesh.emitter();
         for (Triangle triangle : geometry.triangles()) {
             Vector3f normal = rotate(triangle.normal(), turns, false);
             for (int index = 0; index < 4; index++) {
                 int vertex = Math.min(index, 2);
-                Vector3f scaled = new Vector3f(triangle.positions()[vertex])
-                        .sub(0.5f, 0, 0.5f).mul(scale).add(0.5f, 0, 0.5f);
+                Vector3f scaled =
+                        new Vector3f(triangle.positions()[vertex])
+                                .sub(0.5f, 0, 0.5f)
+                                .mul(scale)
+                                .add(0.5f, 0, 0.5f);
                 Vector3f position = rotate(scaled, turns, true);
                 emitter.pos(index, position.x, position.y, position.z);
                 emitter.uv(index, triangle.u()[vertex], triangle.v()[vertex]);
@@ -160,15 +203,19 @@ public final class DecorativeMeshBakedModel implements BakedModel, FabricBakedMo
             Vector3f[] positions = new Vector3f[rawVertices.size()];
             for (int i = 0; i < positions.length; i++) {
                 JsonArray p = rawVertices.get(i).getAsJsonArray();
-                positions[i] = new Vector3f(p.get(0).getAsFloat(), p.get(1).getAsFloat(), p.get(2).getAsFloat());
+                positions[i] =
+                        new Vector3f(
+                                p.get(0).getAsFloat(),
+                                p.get(1).getAsFloat(),
+                                p.get(2).getAsFloat());
             }
             List<Triangle> triangles = new ArrayList<>();
             for (JsonElement element : root.getAsJsonArray("triangles")) {
                 JsonArray indices = element.getAsJsonArray();
                 Vector3f[] p = {
-                        positions[indices.get(0).getAsInt()],
-                        positions[indices.get(1).getAsInt()],
-                        positions[indices.get(2).getAsInt()]
+                    positions[indices.get(0).getAsInt()],
+                    positions[indices.get(1).getAsInt()],
+                    positions[indices.get(2).getAsInt()]
                 };
                 Vector3f edge1 = new Vector3f(p[1]).sub(p[0]);
                 Vector3f edge2 = new Vector3f(p[2]).sub(p[0]);
@@ -183,8 +230,8 @@ public final class DecorativeMeshBakedModel implements BakedModel, FabricBakedMo
                 float y = (index / columns) * tile + gutter + 0.5f;
                 float[] u = {x / width, x / width, (x + span) / width};
                 float[] v = {y / height, (y + span) / height, (y + tipV * span) / height};
-                MeshUvHandedness.requireVanilla(source,
-                        p[0], u[0], v[0], p[1], u[1], v[1], p[2], u[2], v[2]);
+                MeshUvHandedness.requireVanilla(
+                        source, p[0], u[0], v[0], p[1], u[1], v[1], p[2], u[2], v[2]);
                 triangles.add(new Triangle(p, normal, u, v));
             }
             return new Geometry(List.copyOf(triangles));
@@ -214,7 +261,8 @@ public final class DecorativeMeshBakedModel implements BakedModel, FabricBakedMo
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state, @Nullable Direction side, RandomSource random) {
         return List.of();
     }
 
@@ -250,8 +298,11 @@ public final class DecorativeMeshBakedModel implements BakedModel, FabricBakedMo
 
     @Override
     public void emitBlockQuads(
-            QuadEmitter emitter, BlockAndTintGetter blockView, BlockState state,
-            BlockPos pos, Supplier<RandomSource> randomSupplier,
+            QuadEmitter emitter,
+            BlockAndTintGetter blockView,
+            BlockState state,
+            BlockPos pos,
+            Supplier<RandomSource> randomSupplier,
             Predicate<@Nullable Direction> cullTest) {
         this.meshes.get(state.getValue(BlockStateProperties.HORIZONTAL_FACING)).outputTo(emitter);
     }
@@ -261,9 +312,7 @@ public final class DecorativeMeshBakedModel implements BakedModel, FabricBakedMo
         this.meshes.get(Direction.NORTH).outputTo(emitter);
     }
 
-    private record Geometry(List<Triangle> triangles) {
-    }
+    private record Geometry(List<Triangle> triangles) {}
 
-    private record Triangle(Vector3f[] positions, Vector3f normal, float[] u, float[] v) {
-    }
+    private record Triangle(Vector3f[] positions, Vector3f normal, float[] u, float[] v) {}
 }

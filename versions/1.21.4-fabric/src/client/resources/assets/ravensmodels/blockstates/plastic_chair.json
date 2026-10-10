@@ -1,8 +1,16 @@
 {
-  "variants": {
-    "facing=north": { "model": "ravensmodels:block/plastic_chair" },
-    "facing=east": { "model": "ravensmodels:block/plastic_chair" },
-    "facing=south": { "model": "ravensmodels:block/plastic_chair" },
-    "facing=west": { "model": "ravensmodels:block/plastic_chair" }
-  }
+    "variants": {
+        "facing=north": {
+            "model": "ravensmodels:block/plastic_chair"
+        },
+        "facing=east": {
+            "model": "ravensmodels:block/plastic_chair"
+        },
+        "facing=south": {
+            "model": "ravensmodels:block/plastic_chair"
+        },
+        "facing=west": {
+            "model": "ravensmodels:block/plastic_chair"
+        }
+    }
 }

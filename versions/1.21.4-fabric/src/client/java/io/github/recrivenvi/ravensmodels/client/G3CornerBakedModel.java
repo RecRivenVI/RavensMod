@@ -6,6 +6,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.recrivenvi.ravensmodels.ModContent;
 import io.github.recrivenvi.ravensmodels.RavensModels;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
@@ -36,16 +45,6 @@ import net.minecraft.world.level.block.state.properties.StairsShape;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 /** Reload-safe G3 meshes pre-baked for every stair-like block state. */
 public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
     private static final ResourceLocation STRAIGHT_GEOMETRY = id("models/mesh/g3/straight.json");
@@ -64,26 +63,34 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
     private G3CornerBakedModel(BakedModel delegate, Map<BlockState, Mesh> stateMeshes) {
         this.delegate = delegate;
         this.stateMeshes = stateMeshes;
-        this.itemMesh = stateMeshes.get(ModContent.G3_ROUND_CORNER.defaultBlockState()
-                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-                .setValue(BlockStateProperties.HALF, Half.BOTTOM)
-                .setValue(BlockStateProperties.STAIRS_SHAPE, StairsShape.STRAIGHT)
-                .setValue(BlockStateProperties.WATERLOGGED, false));
+        this.itemMesh =
+                stateMeshes.get(
+                        ModContent.G3_ROUND_CORNER
+                                .defaultBlockState()
+                                .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+                                .setValue(BlockStateProperties.HALF, Half.BOTTOM)
+                                .setValue(BlockStateProperties.STAIRS_SHAPE, StairsShape.STRAIGHT)
+                                .setValue(BlockStateProperties.WATERLOGGED, false));
     }
 
     public static void register() {
         PreparableModelLoadingPlugin.register(
-                (resourceManager, executor) -> CompletableFuture.supplyAsync(
-                        () -> loadGeometry(resourceManager), executor),
+                (resourceManager, executor) ->
+                        CompletableFuture.supplyAsync(
+                                () -> loadGeometry(resourceManager), executor),
                 (geometry, context) -> {
-                    context.modifyModelAfterBake().register((model, bakeContext) ->
-                            MODEL.equals(bakeContext.id())
-                                    ? bake(model, bakeContext.baker(), geometry)
-                                    : model);
-                    context.modifyBlockModelAfterBake().register((model, bakeContext) ->
-                            BLOCK.equals(bakeContext.id().id())
-                                    ? bake(model, bakeContext.baker(), geometry)
-                                    : model);
+                    context.modifyModelAfterBake()
+                            .register(
+                                    (model, bakeContext) ->
+                                            MODEL.equals(bakeContext.id())
+                                                    ? bake(model, bakeContext.baker(), geometry)
+                                                    : model);
+                    context.modifyBlockModelAfterBake()
+                            .register(
+                                    (model, bakeContext) ->
+                                            BLOCK.equals(bakeContext.id().id())
+                                                    ? bake(model, bakeContext.baker(), geometry)
+                                                    : model);
                 });
     }
 
@@ -95,16 +102,19 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
         Renderer renderer = Renderer.get();
         RenderMaterial material = renderer.materialFinder().blendMode(BlendMode.SOLID).find();
         Map<BlockState, Mesh> meshes = new HashMap<>();
-        for (BlockState state : ModContent.G3_ROUND_CORNER.getStateDefinition().getPossibleStates()) {
+        for (BlockState state :
+                ModContent.G3_ROUND_CORNER.getStateDefinition().getPossibleStates()) {
             MeshPart part = geometry.forShape(state.getValue(BlockStateProperties.STAIRS_SHAPE));
-            TextureAtlasSprite sprite = baker.sprites().get(
-                    new Material(TextureAtlas.LOCATION_BLOCKS, part.texture()));
-            meshes.put(state, buildMesh(
-                    renderer,
-                    material,
-                    sprite,
-                    part.quads(),
-                    StateTransform.forState(state)));
+            TextureAtlasSprite sprite =
+                    baker.sprites().get(new Material(TextureAtlas.LOCATION_BLOCKS, part.texture()));
+            meshes.put(
+                    state,
+                    buildMesh(
+                            renderer,
+                            material,
+                            sprite,
+                            part.quads(),
+                            StateTransform.forState(state)));
         }
         return new G3CornerBakedModel(model, Map.copyOf(meshes));
     }
@@ -130,13 +140,18 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
                 emitter.color(vertexIndex, 0xFFFFFFFF);
             }
 
-            Vector3f faceNormal = new Vector3f(transformedPositions[1]).sub(transformedPositions[0])
-                    .cross(new Vector3f(transformedPositions[2]).sub(transformedPositions[0]))
-                    .normalize();
-            emitter
-                    .spriteBake(sprite, MutableQuadView.BAKE_NORMALIZED)
+            Vector3f faceNormal =
+                    new Vector3f(transformedPositions[1])
+                            .sub(transformedPositions[0])
+                            .cross(
+                                    new Vector3f(transformedPositions[2])
+                                            .sub(transformedPositions[0]))
+                            .normalize();
+            emitter.spriteBake(sprite, MutableQuadView.BAKE_NORMALIZED)
                     .material(material)
-                    .nominalFace(Direction.getApproximateNearest(faceNormal.x, faceNormal.y, faceNormal.z))
+                    .nominalFace(
+                            Direction.getApproximateNearest(
+                                    faceNormal.x, faceNormal.y, faceNormal.z))
                     .cullFace(null)
                     .emit();
         }
@@ -150,13 +165,15 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
                 loadMesh(resourceManager, OUTER_GEOMETRY));
     }
 
-    private static List<MeshQuad> loadMesh(ResourceManager resourceManager, ResourceLocation geometry) {
+    private static List<MeshQuad> loadMesh(
+            ResourceManager resourceManager, ResourceLocation geometry) {
         try {
             Resource resource = resourceManager.getResourceOrThrow(geometry);
             try (Reader reader = resource.openAsReader()) {
                 JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
                 if (root.get("uv_handedness").getAsInt() != -1) {
-                    throw new IllegalStateException("G3 mesh must declare uv_handedness=-1: " + geometry);
+                    throw new IllegalStateException(
+                            "G3 mesh must declare uv_handedness=-1: " + geometry);
                 }
                 float textureWidth = root.get("texture_width").getAsFloat();
                 float textureHeight = root.get("texture_height").getAsFloat();
@@ -164,18 +181,20 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
                 Vector3f[] positions = new Vector3f[rawVertices.size()];
                 for (int index = 0; index < rawVertices.size(); index++) {
                     JsonArray vertex = rawVertices.get(index).getAsJsonArray();
-                    positions[index] = new Vector3f(value(vertex, 0), value(vertex, 1), value(vertex, 2));
+                    positions[index] =
+                            new Vector3f(value(vertex, 0), value(vertex, 1), value(vertex, 2));
                 }
 
                 JsonArray rawQuads = root.getAsJsonArray("quads");
                 List<MeshQuad> quads = new ArrayList<>(rawQuads.size());
                 for (JsonElement element : rawQuads) {
-                    quads.add(readQuad(
-                            element.getAsJsonObject(),
-                            positions,
-                            geometry,
-                            textureWidth,
-                            textureHeight));
+                    quads.add(
+                            readQuad(
+                                    element.getAsJsonObject(),
+                                    positions,
+                                    geometry,
+                                    textureWidth,
+                                    textureHeight));
                 }
                 return List.copyOf(quads);
             }
@@ -198,17 +217,25 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
             Vector3f position = positions[indices.get(index).getAsInt()];
             JsonArray uv = rawUvs.get(index).getAsJsonArray();
             JsonArray normal = rawNormals.get(index).getAsJsonArray();
-            vertices[index] = new MeshVertex(
-                    new Vector3f(position),
-                    new Vector3f(value(normal, 0), value(normal, 1), value(normal, 2)).normalize(),
-                    value(uv, 0) / textureWidth,
-                    value(uv, 1) / textureHeight);
+            vertices[index] =
+                    new MeshVertex(
+                            new Vector3f(position),
+                            new Vector3f(value(normal, 0), value(normal, 1), value(normal, 2))
+                                    .normalize(),
+                            value(uv, 0) / textureWidth,
+                            value(uv, 1) / textureHeight);
         }
         MeshUvHandedness.requireVanilla(
                 geometry,
-                vertices[0].position(), vertices[0].u(), vertices[0].v(),
-                vertices[1].position(), vertices[1].u(), vertices[1].v(),
-                vertices[2].position(), vertices[2].u(), vertices[2].v());
+                vertices[0].position(),
+                vertices[0].u(),
+                vertices[0].v(),
+                vertices[1].position(),
+                vertices[1].u(),
+                vertices[1].v(),
+                vertices[2].position(),
+                vertices[2].u(),
+                vertices[2].v());
         return new MeshQuad(vertices);
     }
 
@@ -222,9 +249,7 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(
-            @Nullable BlockState state,
-            @Nullable Direction side,
-            RandomSource random) {
+            @Nullable BlockState state, @Nullable Direction side, RandomSource random) {
         return List.of();
     }
 
@@ -284,26 +309,24 @@ public final class G3CornerBakedModel implements BakedModel, FabricBakedModel {
         }
     }
 
-    private record MeshPart(List<MeshQuad> quads, ResourceLocation texture) {
-    }
+    private record MeshPart(List<MeshQuad> quads, ResourceLocation texture) {}
 
-    private record MeshQuad(MeshVertex[] vertices) {
-    }
+    private record MeshQuad(MeshVertex[] vertices) {}
 
-    private record MeshVertex(Vector3f position, Vector3f normal, float u, float v) {
-    }
+    private record MeshVertex(Vector3f position, Vector3f normal, float u, float v) {}
 
     private record StateTransform(int yQuarterTurns, @Nullable Direction topRotationAxis) {
         static StateTransform forState(BlockState state) {
             StairsShape targetShape = state.getValue(BlockStateProperties.STAIRS_SHAPE);
             boolean top = state.getValue(BlockStateProperties.HALF) == Half.TOP;
             StairsShape sourceShape = top ? swapLeftRight(targetShape) : targetShape;
-            int facingTurns = switch (state.getValue(BlockStateProperties.HORIZONTAL_FACING)) {
-                case EAST -> 1;
-                case SOUTH -> 2;
-                case WEST -> 3;
-                default -> 0;
-            };
+            int facingTurns =
+                    switch (state.getValue(BlockStateProperties.HORIZONTAL_FACING)) {
+                        case EAST -> 1;
+                        case SOUTH -> 2;
+                        case WEST -> 3;
+                        default -> 0;
+                    };
             if (sourceShape == StairsShape.INNER_LEFT || sourceShape == StairsShape.OUTER_LEFT) {
                 facingTurns = Math.floorMod(facingTurns - 1, 4);
             }

@@ -1,6 +1,8 @@
 package io.github.recrivenvi.ravensmodels.block;
 
 import io.github.recrivenvi.ravensmodels.ModContent;
+import java.util.List;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -18,9 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-import java.util.UUID;
-
 /** Exists only while a player occupies a chair; it is never written to the world save. */
 public final class ChairSeatEntity extends Entity {
     private BlockPos chairPos = BlockPos.ZERO;
@@ -34,7 +33,9 @@ public final class ChairSeatEntity extends Entity {
     }
 
     public static List<ChairSeatEntity> at(ServerLevel level, BlockPos pos) {
-        return level.getEntitiesOfClass(ChairSeatEntity.class, new AABB(pos).inflate(0.25),
+        return level.getEntitiesOfClass(
+                ChairSeatEntity.class,
+                new AABB(pos).inflate(0.25),
                 seat -> !seat.isRemoved() && seat.chairPos.equals(pos));
     }
 
@@ -60,8 +61,11 @@ public final class ChairSeatEntity extends Entity {
         if (level() instanceof ServerLevel server) {
             BlockState state = server.getBlockState(this.chairPos);
             Entity rider = getFirstPassenger();
-            if (rider == null || rider.isRemoved() || !rider.isAlive()
-                    || rider.level() != level() || !state.is(ModContent.PLASTIC_CHAIR)) {
+            if (rider == null
+                    || rider.isRemoved()
+                    || !rider.isAlive()
+                    || rider.level() != level()
+                    || !state.is(ModContent.PLASTIC_CHAIR)) {
                 ejectPassengers();
                 discard();
                 return;
@@ -97,19 +101,26 @@ public final class ChairSeatEntity extends Entity {
     @Override
     public Vec3 getDismountLocationForPassenger(LivingEntity passenger) {
         Direction facing = Direction.fromYRot(getYRot());
-        Direction[] directions = {facing, facing.getClockWise(), facing.getCounterClockWise(), facing.getOpposite()};
+        Direction[] directions = {
+            facing, facing.getClockWise(), facing.getCounterClockWise(), facing.getOpposite()
+        };
         for (int distance = 1; distance <= 2; distance++) {
             for (Direction direction : directions) {
                 for (int up = 0; up <= 1; up++) {
-                    Vec3 candidate = DismountHelper.findSafeDismountLocation(
-                            passenger.getType(), level(), this.chairPos.relative(direction, distance).above(up), true);
+                    Vec3 candidate =
+                            DismountHelper.findSafeDismountLocation(
+                                    passenger.getType(),
+                                    level(),
+                                    this.chairPos.relative(direction, distance).above(up),
+                                    true);
                     if (candidate != null) {
                         return candidate;
                     }
                 }
             }
         }
-        return Vec3.atBottomCenterOf(this.chairPos).add(0, PlasticChairBlock.MODEL_HEIGHT + 0.01, 0);
+        return Vec3.atBottomCenterOf(this.chairPos)
+                .add(0, PlasticChairBlock.MODEL_HEIGHT + 0.01, 0);
     }
 
     @Override
@@ -145,14 +156,11 @@ public final class ChairSeatEntity extends Entity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-    }
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-    }
+    protected void readAdditionalSaveData(CompoundTag tag) {}
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-    }
+    protected void addAdditionalSaveData(CompoundTag tag) {}
 }

@@ -1,29 +1,31 @@
 {
-  "schemaVersion": 1,
-  "id": "${mod_id}",
-  "version": "${version}",
-  "name": "${mod_name}",
-  "authors": [
-    "${mod_author}"
-  ],
-  "contact": {
-    "homepage": "${mod_homepage}",
-    "sources": "${mod_sources}"
-  },
-  "icon": "assets/ravensmodels/icon.png",
-  "environment": "${mod_environment}",
-  "entrypoints": {
-    "main": [
-      "io.github.recrivenvi.ravensmodels.RavensModels"
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${mod_version}",
+    "name": "${mod_name}",
+    "license": "${mod_license}",
+    "description": "${mod_description}",
+    "authors": [
+        "${mod_authors}"
     ],
-    "client": [
-      "io.github.recrivenvi.ravensmodels.client.RavensModelsClient"
-    ]
-  },
-  "depends": {
-    "fabricloader": ">=${loader_version}",
-    "minecraft": "~${mc_version}",
-    "java": ">=${java_version}",
-    "fabric-api": "*"
-  }
+    "contact": {
+        "homepage": "${mod_homepage}",
+        "sources": "${mod_sources}"
+    },
+    "icon": "assets/ravensmodels/icon.png",
+    "environment": "${fabric_environment}",
+    "entrypoints": {
+        "main": [
+            "${mod_group}.RavensModels"
+        ],
+        "client": [
+            "${mod_group}.client.RavensModelsClient"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=${loader_minimum}",
+        "minecraft": "~${minecraft_version}",
+        "java": ">=${java_version}",
+        "fabric-api": "*"
+    }
 }
