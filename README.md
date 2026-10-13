@@ -23,7 +23,7 @@ Minecraft 1.21.4 Fabric 模型方块模组，内部项目名为 `RavensModels`�
 ## 文档
 
 - [安装与使用](documents/usage/installation-basics.md)
-- [日常开发流程](documents/development/workflow-daily.md)
+- [日常开发流程](gradle/conventions/specification/development/workflow-daily.md)
 - [构建与运行](documents/development/build-project.md)
 - [本机配置](documents/development/setup-configuration.md)
 - [项目规范](documents/AGENTS.md)

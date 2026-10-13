@@ -1,6 +1,6 @@
 # 本机与实例配置
 
-配置格式与全部取值规则见[仓库配置](../reference/configuration-repository.md)。本项目只使用一个 Target 和三个内置日常实例，不另建解析器或运行适配层。
+配置格式与全部取值规则见[仓库配置](../../gradle/conventions/specification/reference/configuration-repository.md)。本项目只使用一个 Target 和三个内置日常实例，不另建解析器或运行适配层。
 
 ## 配置所有权
 

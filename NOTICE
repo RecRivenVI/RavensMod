@@ -3,8 +3,8 @@
 第三方内容遵循各自随附的许可与授权声明。产品模型与纹理保留各自资源中的来源与授权信息；模板许可不适用于这些第三方素材。
 
 Raven's Mod Template
-文件：AGENTS.md、CLAUDE.md、.rumdl.toml、.editorconfig、.gitattributes、.github/workflows/、components/configuration/、components/conventions/、components/compliance/、gradle/ 的构建配置，以及通用构建、配置、合规与操作规程文档；settings.gradle.kts 与 Target 构建脚本按其结构衍生。
-来源：1.2.1，https://github.com/RecRivenVI/Ravens-Mod-Template
+文件：AGENTS.md、.editorconfig、.gitattributes、.github/workflows/、gradle/conventions/（含规范附件）、gradle/ 的构建配置；settings.gradle.kts 与 Target 构建脚本按其结构衍生。
+来源：2.0.0，https://github.com/RecRivenVI/Ravens-Mod-Template
 版权声明：Copyright (c) 2026 RavenYin
 许可：MIT，原文见 licenses/ravens_mod_template-mit.txt。
 

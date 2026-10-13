@@ -22,7 +22,7 @@ git diff --check
 
 发行 JAR 命名为 `ravensmodels-1.21.4-fabric-<mod_version>.jar`，生成于 Target 的 `build/libs/`，`verifyRelease` 将发行构件汇总到根 `build/release/<mod_version>/`。产品版本目前是 `1.0.0+1.21.4`。
 
-根 `check` 聚合配置、合规、文档、格式和模板组件测试。Target 目前没有 JUnit、GameTest 或探针源码；仓库没有产品验证项目。配置库测试不是 Minecraft 游戏验收。
+根 `check` 聚合配置、合规、文档、格式和模板插件测试。Target 目前没有 JUnit、GameTest 或探针源码；仓库没有产品验证项目。配置库测试不是 Minecraft 游戏验收。
 
 ## 日常运行
 
