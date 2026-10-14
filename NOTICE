@@ -4,7 +4,7 @@
 
 Raven's Mod Template
 文件：AGENTS.md、.editorconfig、.gitattributes、.github/workflows/、gradle/conventions/（含规范附件）、gradle/ 的构建配置；settings.gradle.kts 与 Target 构建脚本按其结构衍生。
-来源：2.0.0，https://github.com/RecRivenVI/Ravens-Mod-Template
+来源：2.0.2，https://github.com/RecRivenVI/Ravens-Mod-Template
 版权声明：Copyright (c) 2026 RavenYin
 许可：MIT，原文见 licenses/ravens_mod_template-mit.txt。
 

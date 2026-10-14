@@ -13,9 +13,10 @@ import org.gradle.api.initialization.Settings;
 import org.gradle.api.tasks.TaskProvider;
 
 public abstract class CompliancePlugin implements Plugin<Settings> {
-    private static final String INSTANCES = "io.github.recrivenvi.instances";
-    private static final String PRODUCTS = "io.github.recrivenvi.products";
-    private static final String TOOLS = "io.github.recrivenvi.tools";
+    // 插件入口把实例名称与 components {} 中登记的组件名称发布为根项目的这些额外属性。
+    public static final String INSTANCES_PROPERTY = "io.github.recrivenvi.instances";
+    public static final String PRODUCTS_PROPERTY = "io.github.recrivenvi.products";
+    public static final String TOOLS_PROPERTY = "io.github.recrivenvi.tools";
 
     @Override
     public void apply(Settings settings) {
@@ -38,8 +39,8 @@ public abstract class CompliancePlugin implements Plugin<Settings> {
                     task.getRootDirectory().set(root.getLayout().getProjectDirectory());
                     task.getTargets().set(targets);
                     task.getComponents().set(includedComponents(root));
-                    task.getProducts().set(names(root, PRODUCTS));
-                    task.getTools().set(names(root, TOOLS));
+                    task.getProducts().set(names(root, PRODUCTS_PROPERTY));
+                    task.getTools().set(names(root, TOOLS_PROPERTY));
                     task.getInstances().set(instances(root));
                     task.getSourceSets().set(extension.sourceSets());
                     task.getVocabulary().set(vocabulary);
@@ -65,14 +66,13 @@ public abstract class CompliancePlugin implements Plugin<Settings> {
                                         .configure(task -> task.dependsOn(verify)));
     }
 
-    // configuration 插件发布实例名称，包括登记的额外实例；内置实例总是有效。
+    // 发布的实例名称包括登记的额外实例；内置实例总是有效。
     private static Set<String> instances(Project root) {
         Set<String> instances = new TreeSet<>(Repository.BUILT_IN_INSTANCES);
-        instances.addAll(names(root, INSTANCES));
+        instances.addAll(names(root, INSTANCES_PROPERTY));
         return instances;
     }
 
-    // configuration 插件把实例名称、conventions 插件把登记的组件名称发布为根项目的额外属性。
     private static Set<String> names(Project root, String property) {
         Object names = root.getExtensions().getExtraProperties().getProperties().get(property);
         Set<String> found = new TreeSet<>();

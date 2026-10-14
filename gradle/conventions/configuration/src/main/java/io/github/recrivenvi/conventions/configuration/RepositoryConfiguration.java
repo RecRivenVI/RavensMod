@@ -46,23 +46,6 @@ public final class RepositoryConfiguration implements Serializable {
             Map<String, Map<String, String>> targetProperties,
             Map<String, Object> inputsToml,
             Map<String, Object> instancesToml,
-            Map<String, Object> localToml) {
-        this(
-                rootDirectory,
-                gradleProperties,
-                targetProperties,
-                inputsToml,
-                instancesToml,
-                localToml,
-                Map.of());
-    }
-
-    RepositoryConfiguration(
-            File rootDirectory,
-            Map<String, String> gradleProperties,
-            Map<String, Map<String, String>> targetProperties,
-            Map<String, Object> inputsToml,
-            Map<String, Object> instancesToml,
             Map<String, Object> localToml,
             Map<String, Map<String, Object>> validationTomls) {
         this.rootDirectory = rootDirectory.getAbsoluteFile();

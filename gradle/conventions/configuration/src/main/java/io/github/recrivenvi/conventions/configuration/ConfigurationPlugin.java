@@ -3,15 +3,12 @@ package io.github.recrivenvi.conventions.configuration;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeSet;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.initialization.Settings;
 
 public abstract class ConfigurationPlugin implements Plugin<Settings> {
-    public static final String INSTANCES_PROPERTY = "io.github.recrivenvi.instances";
-
     @Override
     public void apply(Settings settings) {
         TargetRegistry registry =
@@ -55,12 +52,6 @@ public abstract class ConfigurationPlugin implements Plugin<Settings> {
     private static void configure(Project root) {
         RepositoryConfiguration configuration =
                 root.getGradle().getExtensions().getByType(RepositoryConfiguration.class);
-        root.getExtensions()
-                .getExtraProperties()
-                .set(
-                        INSTANCES_PROPERTY,
-                        new TreeSet<>(
-                                configuration.instances().stream().map(Instance::id).toList()));
         var verify =
                 root.getTasks()
                         .register(

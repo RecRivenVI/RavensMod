@@ -1,6 +1,6 @@
 # 构建架构
 
-构建由模板插件 `gradle/conventions/` 组织。它是一个包含构建，模块 `configuration` 负责事实与配置，`target` 负责 Target、组件登记、日常实例与验证运行，`component` 为项目组件提供公共设置，`compliance` 负责合规规则；`specification/` 是本规范的附件，不是 Gradle 模块。Target 的构建脚本只声明加载器插件与该 Target 独有的原生配置，项目组件只声明自己的构建内容，其余配置由插件统一提供。
+构建由模板插件 `gradle/conventions/` 组织。它是一个包含构建，模块 `configuration` 负责事实与配置，`platform` 负责每个 Target 的构建、组件登记、日常实例、验证运行与发行核对，`component` 为项目组件提供公共设置，`compliance` 负责合规规则；`specification/` 是本规范的附件，不是 Gradle 模块。Target 的构建脚本只声明加载器插件与该 Target 独有的原生配置，项目组件只声明自己的构建内容，其余配置由插件统一提供。
 
 ## 组成
 
@@ -9,15 +9,15 @@
 | 模块 | 对外插件 | 职责 |
 | --- | --- | --- |
 | `configuration` | 无 | 提供 `targets {}` 登记；读取并校验项目事实、Target 事实、日常实例配置与每项验证的 `[instances]`，算出每个日常实例与验证实例的启动参数；在构建的 Gradle 对象上注册扩展 `repositoryConfiguration`，在根项目注册任务 `verifyConfiguration`、`printLaunchSettings` 与 `verifyInputs` |
-| `target` | `io.github.recrivenvi.conventions` | 插件入口：依次应用 `configuration` 的设置插件、foojay 工具链解析插件与 `compliance` 的设置插件；提供 `components {}` 登记；为根项目应用 `RootConventions`，为每个 Target 应用 `TargetConventions` |
+| `platform` | `io.github.recrivenvi.conventions` | 插件入口：依次应用 `configuration` 的设置插件、foojay 工具链解析插件与 `compliance` 的设置插件；提供 `components {}` 登记；把实例与组件的名单交给 `compliance`；为根项目应用 `RootConventions`，为每个 Target 应用 `TargetConventions` |
 | `component` | `io.github.recrivenvi.conventions.component` | 项目组件在自己的 `settings.gradle.kts` 中应用，见下文"项目组件"；只依赖 Spotless，因此组件不会带上 Minecraft 构建插件，也不必声明它们所在的 Maven 仓库 |
 | `compliance` | 无 | 提供 `compliance {}` 设置；注册 `verifyCompliance` 与 `printVocabulary`；AGENTS.md 每一节由一个检查类实现，见 [mechanism-compliance](mechanism-compliance.md) |
 
-模板插件是模板文件（G-08），项目不修改。它是一个普通的 Gradle 多项目构建，可以用 `.\gradlew.bat -p gradle/conventions check` 单独构建并运行全部测试。插件入口放在 `target` 模块中，因为入口要应用另外两个模块的插件，而 `target` 本来就依赖 `configuration`；放在 `configuration` 中会形成循环依赖。
+模板插件是模板文件（G-08），项目不修改。它是一个普通的 Gradle 多项目构建，可以用 `.\gradlew.bat -p gradle/conventions check` 单独构建并运行全部测试。插件入口放在 `platform` 模块中，因为入口要应用另外两个模块的插件，而 `platform` 本来就依赖 `configuration`；放在 `configuration` 中会形成循环依赖。
 
 ## 插件类路径
 
-ModDevGradle（下称 MDG）、Loom 与 Spotless 是 `target` 模块的依赖，因此位于设置阶段的类路径上。Target 脚本按 ID 应用它们而不写版本；版本只在 [libs.versions.toml](../../../libs.versions.toml) 中定义：Spotless 等与 Minecraft 无关的工具由模板定义（F-06），MDG 与 Loom 的版本由项目按 [procedure-update_dependencies](../development/procedure-update_dependencies.md) 升级。反过来，Target 脚本不能再为这些插件指定版本（T-02）。`configuration` 与 `compliance` 用 tomlj 解析 TOML 文件，它同样是模板插件的依赖，不进入任何模组。
+ModDevGradle（下称 MDG）、Loom 与 Spotless 是 `platform` 模块的依赖，因此位于设置阶段的类路径上。Target 脚本按 ID 应用它们而不写版本；版本只在 [libs.versions.toml](../../../libs.versions.toml) 中定义：Spotless 等与 Minecraft 无关的工具由模板定义（F-06），MDG 与 Loom 的版本由项目按 [procedure-update_dependencies](../development/procedure-update_dependencies.md) 升级。反过来，Target 脚本不能再为这些插件指定版本（T-02）。`configuration` 与 `compliance` 用 tomlj 解析 TOML 文件，它同样是模板插件的依赖，不进入任何模组。
 
 Loom 1.18 以 Java 25 编译，因此 Gradle 守护进程必须运行在 JDK 25 上，由 [gradle-daemon-jvm.properties](../../../gradle-daemon-jvm.properties) 保证。
 
@@ -28,7 +28,7 @@ Loom 1.18 以 Java 25 编译，因此 Gradle 守护进程必须运行在 JDK 25 
 1. 应用 `java` 与 Spotless；从事实设置 group 与 version，归档名为 `<mod_id>-<target>`。
 2. 按 `java_version` 设置工具链与 `--release`，源码编码为 UTF-8。
 3. 注册扩展 `target`，供脚本读取事实、声明随 Target 变化的依赖与引用本地输入，见 [configuration-repository](../reference/configuration-repository.md)；注册该 Target 的 `verifyInputs`，让编译任务依赖它。Loom 在配置阶段就解析类路径，因此缺失或不符的本地输入在配置阶段只是不提供文件，由 `verifyInputs` 在编译前报告原因。
-4. 把 `src/main/templates/` 展开到 `build/generated/sources/templates/main/` 并加入源码，展开加载器元数据文件。展开值按字符串规则转义，因此占位符只能放在字符串中（P-01）。把根目录的 `LICENSE`、`NOTICE`、`COPYING`、`COPYING.LESSER` 复制进模组的 `META-INF/`，把 `licenses/` 复制进 `META-INF/licenses/`；Target 脚本开启源码 JAR（`java { withSourcesJar() }`）时，源码 JAR 以同样的位置包含这些文件，1.x Fabric 重映射后的源码 JAR 也一样。
+4. 把 `src/main/templates/` 展开到 `build/generated/sources/templates/main/` 并加入源码，展开加载器元数据文件。展开值按字符串规则转义，因此占位符只能放在字符串中（P-01）。把根目录的 `LICENSE`（可带 `.md` 或 `.txt`）、`NOTICE`、`COPYING`、`COPYING.LESSER` 复制进模组的 `META-INF/`，把 `licenses/` 复制进 `META-INF/licenses/`；Target 脚本开启源码 JAR（`java { withSourcesJar() }`）时，源码 JAR 以同样的位置包含这些文件，1.x Fabric 重映射后的源码 JAR 也一样。
 5. Target 有 `src/probe/` 时创建 `probe` 源码集：编译与运行类路径包含 `main` 的输出与类路径，Fabric 还包含 `client`；同样展开 `src/probe/templates/` 与元数据；让 `check` 编译它。探针缺少产品已有的元数据文件时在配置阶段失败。
 6. 按加载器准备原生目录：NeoForge 与 Forge 把 `src/generated/resources/` 加入资源并排除数据生成的 `.cache/`；Fabric 在 Loom 应用后添加 Minecraft 与 Fabric Loader 依赖，1.x 版本另按 `mappings` 添加映射表，并开启 `client` 源码集。
 7. 让每个 `product` 组件成为 `implementation` 依赖，并把它的 JAR 内容合并进模组 JAR。Gradle 按压缩包整体跟踪合并来源，脚本给 `jar` 加的包含与排除规则因此也列为 `jar` 的输入，规则改变时重新打包。注册该 Target 的 `verifyRelease`：构建发行 JAR，核对其中有本模组的加载器元数据、`META-INF/` 中的许可文件与 `product` 组件的全部条目，没有 `probe` 源码集的文件与探针的元数据；脚本开启源码 JAR 时一并核对其中的许可文件。模组需要由加载器原生的引导层包装时，Target 脚本把包装后的 JAR 作为发行 JAR 写到 `build/libs/<mod_id>-<target>-<version>.jar` 并挂到 `assemble` 上，模组 JAR 改写到其他位置；这时本模组的加载器元数据可以位于发行 JAR 中恰好一个内嵌 JAR 里，其他内嵌模组按元数据中的模组 ID 区分，内嵌 JAR 中出现探针的元数据时报告；许可文件与 `product` 组件的条目仍须直接位于发行 JAR 中。
@@ -47,14 +47,12 @@ Loom 1.18 以 Java 25 编译，因此 Gradle 守护进程必须运行在 JDK 25 
 
 日常实例与验证运行之外的运行，例如 Target 脚本自己创建的数据生成运行与 Loom 的游戏测试运行，目录统一设为 `versions/<target>/build/run/<运行名>/`（I-05），不会在 Target 目录中留下 L-03 不允许的文件。
 
-验证运行与日常实例使用相同的启动参数规则，区别如下，写法见 [format-validation](../reference/format-validation.md)：
+验证运行与日常实例使用相同的启动参数规则；任务名、系统属性与其他规则见 [format-validation](../reference/format-validation.md)。两种插件中探针的接入方式如下：
 
 | 项 | MDG | Loom |
 | --- | --- | --- |
 | 类路径 | 运行的源码集设为 `probe` | 运行的源码集设为 `probe` |
 | 加载的模组 | 验证运行加载全部登记的模组；其他运行默认不加载探针模组 | 加载器只把类路径上的目录识别为模组，探针只在 `probe` 源码集的类路径上 |
-| 系统属性 | `validation.name`、`validation.target`、`validation.role`、`validation.task`、`validation.result` | 同左 |
-| IDE 运行配置 | 不生成 | 不生成 |
 
 没有 `src/probe/` 的 Target 上，验证运行使用 `main`（Fabric 客户端为 `client`）源码集，只加载产品模组。
 

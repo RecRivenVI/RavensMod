@@ -25,7 +25,8 @@ final class ModMetadata {
 
     record Mod(String id, String version) {}
 
-    // 返回 JAR 声明的模组；文件不是模组时返回空列表。
+    // 返回 JAR 声明的模组；文件不是模组时返回空列表。没有模组 ID 的元数据不算模组，
+    // 例如有的 NeoForge 模组附带一个空的 fabric.mod.json。
     static List<Mod> read(File file) {
         try (ZipFile zip = new ZipFile(file)) {
             List<Mod> mods = new ArrayList<>();
@@ -36,15 +37,18 @@ final class ModMetadata {
                 if (entries == null) continue;
                 for (int i = 0; i < entries.size(); i++) {
                     TomlTable mod = entries.getTable(i);
+                    String id = mod.getString("modId");
+                    if (id == null) continue;
                     String version = mod.getString("version");
                     if ("${file.jarVersion}".equals(version)) version = manifestVersion(zip);
-                    mods.add(new Mod(mod.getString("modId"), version));
+                    mods.add(new Mod(id, version));
                 }
             }
             String fabric = text(zip, "fabric.mod.json");
             if (fabric != null) {
                 Map<String, String> values = topLevelStrings(fabric);
-                mods.add(new Mod(values.get("id"), values.get("version")));
+                if (values.containsKey("id"))
+                    mods.add(new Mod(values.get("id"), values.get("version")));
             }
             return mods;
         } catch (ZipException e) {
@@ -70,6 +74,8 @@ final class ModMetadata {
         }
     }
 
+    // 只读取顶层对象中取值为字符串的键。转义只去掉反斜杠，换行、Unicode 码点等转义不解码；
+    // 实际的模组 ID 与版本不会用到它们。
     static Map<String, String> topLevelStrings(String json) {
         Map<String, String> values = new LinkedHashMap<>();
         int depth = 0;

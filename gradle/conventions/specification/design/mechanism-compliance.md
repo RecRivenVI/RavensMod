@@ -100,7 +100,7 @@ git ls-files --cached --others --exclude-standard -- AGENTS.md gradlew gradlew.b
 | C-05 | Spotless：google-java-format、ktfmt、Gson 与通用空白步骤；组件中的其他语言由组件自己调用的工具负责 | `spotlessCheck` 与组件的 `check`；`spotlessApply` 自动修正 |
 | D-04、D-05 | rumdl，配置为模板插件中的 `rumdl.toml`；相对链接与引用式链接由规则 MD057 与 MD052 检查 | `lintMarkdown`；`fixMarkdown` 自动修正，`spotlessApply` 会先运行它 |
 | F-01 至 F-03 | `configuration` 模块 | `verifyConfiguration` |
-| T-01、T-03 | `configuration` 与 `target` 模块 | 配置阶段 |
+| T-01、T-03 | `configuration` 与 `platform` 模块 | 配置阶段 |
 
 这些检查都挂在 `check` 上，所以 `gradlew check` 覆盖全部 [检查]、[提示] 与 [构建] 规则。拿不到本地输入时，`gradlew checkRepository` 覆盖除 Target 编译与 `verifyInputs` 以外的全部检查。rumdl 是单个原生程序，版本固定在 `gradle/libs.versions.toml`，由 Gradle 从它的 GitHub 发布页下载，本机与持续集成都不需要另外安装。
 

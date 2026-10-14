@@ -9,4 +9,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "conventions"
 
-include("configuration", "target", "component", "compliance")
+include("configuration", "platform", "component", "compliance")

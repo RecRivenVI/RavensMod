@@ -1,6 +1,6 @@
 # 仓库规范
 
-规范版本：2.0.0
+规范版本：2.0.2
 
 本文件是采用本模板的仓库共用的规范，写给 Agent，也约束人类开发者；它与其他模板文件（G-08）随模板版本固定，项目内不修改。项目的信息与补充规则写在项目规范 [documents/AGENTS.md](documents/AGENTS.md)，它对整个仓库生效，只能补充本规范，不能放宽或改写。开始工作前读完这两份文件。
 
@@ -125,7 +125,7 @@
 
 ## 7. 运行与测试
 
-内置的日常实例为 `client`（单人客户端）、`client-multiplayer`（第二名玩家）与 `server`（独立服务端），由 `runClient`、`runClientMultiplayer`、`runServer` 启动，目录为 `instances/<target>/<实例>/`。项目可以在 `instances.toml` 的 `[variants]` 中登记以它们为基础的更多实例。
+内置的日常实例为 `client`（单人客户端）、`client-multiplayer`（第二名玩家）与 `server`（独立服务端），由 `runClient`、`runClientMultiplayer`、`runServer` 启动，目录为 `instances/<target>/<variant>/`。项目可以在 `instances.toml` 的 `[variants]` 中登记以它们为基础的更多实例。
 
 - **I-01** [判断] 日常实例始终加载产品模组，内容持久保留。只在某个实例中使用的测试模组用实例设置 `mods` 按本地输入名称引用。个人偏好写在 `local.toml`，共享预设写在 `instances.toml`。
 - **I-02** [判断] 独立服务端需要使用者在 `local.toml` 中写入 `eula = true`；首次运行时插件写入 `online-mode=false` 与 `white-list=false`，已存在的文件不会被覆盖。

@@ -31,7 +31,7 @@ game-args = ["--quickPlayMultiplayer", "127.0.0.1:25565"]
 .\gradlew.bat printLaunchSettings --target=<target> --variant=client-multiplayer
 ```
 
-改动产品行为、元数据或运行配置后，在受影响的 Target 上启动实例确认结果（W-02）。项目的自动化验证按 [format-validation](../reference/format-validation.md) 放置：验证工具是 `tool` 组件，游戏内代码在各 Target 的 `src/probe/`，验证数据在 `validations/`；文件、构建产物与接口等验证可以独立于游戏运行。每项验证的 `validation.md` 写明执行命令与通过标准；改动涉及它时按"运行"一节执行（V-10）。需要启动游戏的验证在 `validation.toml` 中声明角色，插件为它生成同时加载探针的运行任务，实例在 `validations/<name>/instance/` 中，与日常实例互不影响。新增验证见 [procedure-add_validation](procedure-add_validation.md)；探针代码与验证逻辑由项目编写（I-03）。
+改动产品行为、元数据或运行配置后，在受影响的 Target 上启动实例确认结果（W-02）。改动涉及某项自动化验证时，按它的 `validation.md` 的"运行"一节执行（V-10）；验证的组成与运行方式见 [format-validation](../reference/format-validation.md)，新增验证见 [procedure-add_validation](procedure-add_validation.md)。
 
 ## 检查
 
