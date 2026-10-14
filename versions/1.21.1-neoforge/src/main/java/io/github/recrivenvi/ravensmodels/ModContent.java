@@ -2,11 +2,14 @@ package io.github.recrivenvi.ravensmodels;
 
 import io.github.recrivenvi.ravensmodels.block.AceOfSpadesBlock;
 import io.github.recrivenvi.ravensmodels.block.ChairSeatEntity;
+import io.github.recrivenvi.ravensmodels.block.DecorativeModelBlockEntity;
 import io.github.recrivenvi.ravensmodels.block.DirectionalPanelBlock;
 import io.github.recrivenvi.ravensmodels.block.G3StairBlock;
 import io.github.recrivenvi.ravensmodels.block.HorizontalFacingBlock;
+import io.github.recrivenvi.ravensmodels.block.ModelBlock;
 import io.github.recrivenvi.ravensmodels.block.PlasticChairBlock;
 import io.github.recrivenvi.ravensmodels.block.WaterloggedBlock;
+import java.util.List;
 import java.util.function.Function;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -19,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
@@ -35,6 +39,8 @@ public final class ModContent {
             DeferredRegister.create(Registries.ENTITY_TYPE, RavensModels.MOD_ID);
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, RavensModels.MOD_ID);
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
+            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, RavensModels.MOD_ID);
     public static final DeferredBlock<Block> MIRROR_BLOCK =
             registerSimpleBlock("mirror_block", SoundType.GLASS);
     public static final DeferredBlock<Block> WHITE_BLOCK =
@@ -55,9 +61,55 @@ public final class ModContent {
             registerBlock("david_bust", HorizontalFacingBlock::new, SoundType.STONE, true);
     public static final DeferredBlock<PlasticChairBlock> PLASTIC_CHAIR =
             registerBlock("plastic_chair", PlasticChairBlock::new, SoundType.WOOD, true);
+    public static final DeferredHolder<
+                    BlockEntityType<?>, BlockEntityType<DecorativeModelBlockEntity>>
+            CHAIR_MODEL =
+                    BLOCK_ENTITY_TYPES.register(
+                            "chair_model",
+                            () ->
+                                    BlockEntityType.Builder.of(
+                                                    (pos, state) ->
+                                                            new DecorativeModelBlockEntity(
+                                                                    ModContent.CHAIR_MODEL.get(),
+                                                                    pos,
+                                                                    state),
+                                                    PLASTIC_CHAIR.get())
+                                            .build(null));
+    public static final DeferredHolder<
+                    BlockEntityType<?>, BlockEntityType<DecorativeModelBlockEntity>>
+            DAVID_BUST_MODEL =
+                    BLOCK_ENTITY_TYPES.register(
+                            "david_bust_model",
+                            () ->
+                                    BlockEntityType.Builder.of(
+                                                    (pos, state) ->
+                                                            new DecorativeModelBlockEntity(
+                                                                    ModContent.DAVID_BUST_MODEL
+                                                                            .get(),
+                                                                    pos,
+                                                                    state),
+                                                    DAVID_BUST.get())
+                                            .build(null));
     public static final DeferredHolder<EntityType<?>, EntityType<ChairSeatEntity>> CHAIR_SEAT =
             ENTITY_TYPES.register("chair_seat", ModContent::createChairSeat);
     public static final DeferredBlock<AceOfSpadesBlock> ACE_OF_SPADES = registerAceOfSpades();
+    public static final DeferredHolder<
+                    BlockEntityType<?>, BlockEntityType<DecorativeModelBlockEntity>>
+            MODEL_BLOCK =
+                    BLOCK_ENTITY_TYPES.register(
+                            "model_block",
+                            () ->
+                                    BlockEntityType.Builder.of(
+                                                    DecorativeModelBlockEntity::create,
+                                                    modelBlocks().toArray(Block[]::new))
+                                            .build(null));
+
+    public static List<Block> modelBlocks() {
+        return BLOCKS.getEntries().stream()
+                .map(entry -> (Block) entry.get())
+                .filter(block -> block instanceof ModelBlock)
+                .toList();
+    }
 
     private static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_TAB =
             CREATIVE_TABS.register(
@@ -90,6 +142,7 @@ public final class ModContent {
         BLOCKS.register(bus);
         ITEMS.register(bus);
         ENTITY_TYPES.register(bus);
+        BLOCK_ENTITY_TYPES.register(bus);
         CREATIVE_TABS.register(bus);
     }
 

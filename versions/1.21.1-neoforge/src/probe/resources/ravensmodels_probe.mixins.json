@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "package": "io.github.recrivenvi.ravensmodels.probe.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "client": [
+        "ChunkTaskMixin",
+        "DecorativeModelMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

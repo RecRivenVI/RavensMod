@@ -1,0 +1,9 @@
+tool = "render_benchmark"
+targets = ["1.21.1-neoforge"]
+
+[instances.client]
+mods = ["sodium", "iris"]
+memory-max = "6G"
+
+[benchmark]
+shader = "sundial"

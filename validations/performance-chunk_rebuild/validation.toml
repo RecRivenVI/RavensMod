@@ -1,0 +1,6 @@
+tool = "render_benchmark"
+targets = ["1.21.1-neoforge"]
+
+[instances.client]
+mods = ["sodium", "iris", "flywheel", "colorwheel"]
+memory-max = "6G"

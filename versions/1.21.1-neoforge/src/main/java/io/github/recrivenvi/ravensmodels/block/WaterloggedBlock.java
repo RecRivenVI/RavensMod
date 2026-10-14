@@ -14,7 +14,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
-public final class WaterloggedBlock extends Block implements SimpleWaterloggedBlock {
+public final class WaterloggedBlock extends Block implements SimpleWaterloggedBlock, ModelBlock {
     private static final MapCodec<WaterloggedBlock> CODEC = simpleCodec(WaterloggedBlock::new);
 
     public WaterloggedBlock(Properties properties) {

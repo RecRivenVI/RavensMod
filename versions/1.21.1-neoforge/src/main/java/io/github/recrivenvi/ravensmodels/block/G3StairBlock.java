@@ -15,7 +15,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public final class G3StairBlock extends StairBlock {
+public final class G3StairBlock extends StairBlock implements ModelBlock {
     private static final MapCodec<G3StairBlock> CODEC = simpleCodec(G3StairBlock::new);
 
     private static final VoxelShape BOTTOM_PLATE = box(0, 0, 0, 16, 1, 16);

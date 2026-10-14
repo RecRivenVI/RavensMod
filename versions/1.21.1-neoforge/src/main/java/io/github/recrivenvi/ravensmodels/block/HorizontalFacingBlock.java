@@ -19,7 +19,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 public class HorizontalFacingBlock extends HorizontalDirectionalBlock
-        implements SimpleWaterloggedBlock {
+        implements SimpleWaterloggedBlock, ModelBlock {
     private static final MapCodec<HorizontalFacingBlock> CODEC =
             simpleCodec(HorizontalFacingBlock::new);
 

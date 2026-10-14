@@ -1,0 +1,38 @@
+[sodium]
+version = "0.6.13+mc1.21.1"
+description = "NeoForge 测试客户端使用的 Sodium，与 Iris 正式版配套"
+source = "https://modrinth.com/mod/sodium/version/Pb3OXVqC"
+sha256 = ["7acd7af2ef75ec883a6872c17494ead65e38025151eb08a1d60e36d34377f403"]
+
+[iris]
+version = "1.8.12-snapshot+mc1.21.1-local"
+description = "NeoForge 测试客户端使用的 Iris 正式版"
+source = "https://modrinth.com/mod/iris/version/t3ruzodq"
+sha256 = ["3e3f94d2d5cdcb8145c4385d521974aa2d8669b2cc212351f70cf06488182e83"]
+
+[flywheel]
+version = "1.0.6-1"
+description = "NeoForge 测试客户端使用的持久化网格和 GPU 实例化后端"
+source = "https://maven.createmod.net/dev/engine-room/flywheel/flywheel-neoforge-1.21.1/1.0.6-1/"
+sha256 = ["55f093ad3848c1075b9525bf2a320c9d4f99848e1ba5df8e73abc7f0f31046cf"]
+
+[colorwheel]
+version = "1.3.0+mc1.21.1"
+description = "Flywheel 与 Iris 的着色器兼容后端"
+source = "https://modrinth.com/mod/colorwheel/version/8rq5KP4U"
+sha256 = ["3c7c1f91b1add47053f40a58375de492b87ce83309be378527f100cb842c07c0"]
+
+[iterationrp]
+version = "0.8.31"
+description = "使用者提供的 iterationRP Alpha 着色器包"
+sha256 = ["334d0b0dadb5e2b927b992f2b93596c4cc1a518305c1e2a9b175c754a4d946e8"]
+
+[sundial]
+version = "2026-10-10"
+description = "使用者提供的 Sundial Dev Build 着色器包"
+sha256 = ["75caf8c25f3d765d222afd9e83753db254e67823f750401f1a6f9609c8d47116"]
+
+[sundial_core]
+version = "2026-09-28"
+description = "使用者提供的 Sundial Core Dev Packup 着色器包"
+sha256 = ["9a10739b526b8b426714d6393590f798030504c12f0a72ac4a0bc7603549ad79"]

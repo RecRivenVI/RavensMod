@@ -27,3 +27,10 @@ side="BOTH"
 
 [features.${mod_id}]
 javaVersion="[${java_version},)"
+
+[[dependencies.${mod_id}]]
+modId="flywheel"
+type="optional"
+versionRange="[${flywheel_version},1.1)"
+ordering="AFTER"
+side="CLIENT"

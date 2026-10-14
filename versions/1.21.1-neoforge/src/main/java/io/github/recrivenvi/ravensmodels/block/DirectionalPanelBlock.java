@@ -20,7 +20,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 public final class DirectionalPanelBlock extends DirectionalBlock
-        implements SimpleWaterloggedBlock {
+        implements SimpleWaterloggedBlock, ModelBlock {
     private static final MapCodec<DirectionalPanelBlock> CODEC =
             simpleCodec(DirectionalPanelBlock::new);
 
