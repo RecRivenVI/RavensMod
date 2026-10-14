@@ -1,10 +1,10 @@
 # 安装与使用
 
-Raven's Models 用于 Minecraft 1.21.4 Fabric，提供静态模型与材质方块，客户端和服务端都需要安装本模组。
+Raven's Models 用于 Minecraft 1.21.4 Fabric 与 1.21.1 NeoForge，提供静态模型与材质方块，客户端和服务端都需要安装本模组。
 
 ## 安装
 
-使用 Java 21、Fabric Loader 0.19.3 或更高版本，并安装 Minecraft 1.21.4 对应的 Fabric API。本版依赖验证使用 Fabric API 0.119.4+1.21.4。
+两个版本都使用 Java 21。Minecraft 1.21.4 使用 Fabric Loader 0.19.3 或更高版本，并安装对应的 Fabric API，本版依赖验证使用 Fabric API 0.119.4+1.21.4。Minecraft 1.21.1 使用 NeoForge 21.1.257 或更高的 21.1 系列版本，不需要 Fabric API。
 
 把发行 JAR 放入所使用游戏实例的 mods 文件夹，避免同时安装多个版本。shader 和 PBR 支持不是运行前置；没有相应 shader 时不保证呈现法线、高光与镜面效果。
 
@@ -17,5 +17,7 @@ G3 圆角支持楼梯形态、朝向和上下半部；部分不完整方块支�
 ## 视觉与素材
 
 世界与物品模型姿态以实际游戏为准。法线和高光效果取决于 shader 对 PBR 的处理，不能只凭材质文件存在推断反射或曲率正确。
+
+两个版本使用相同的 LABPBR 材质配置；法线和高光贴图仍需要相应 shader 支持。
 
 模型与纹理包含外部来源素材；保留的来源信息不代表允许自行公开再分发。

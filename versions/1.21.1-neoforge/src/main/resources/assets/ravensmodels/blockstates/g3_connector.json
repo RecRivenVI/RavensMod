@@ -1,0 +1,30 @@
+{
+    "variants": {
+        "facing=down": {
+            "model": "ravensmodels:block/g3_connector",
+            "x": 180
+        },
+        "facing=east": {
+            "model": "ravensmodels:block/g3_connector",
+            "x": 90,
+            "y": 90
+        },
+        "facing=north": {
+            "model": "ravensmodels:block/g3_connector",
+            "x": 90
+        },
+        "facing=south": {
+            "model": "ravensmodels:block/g3_connector",
+            "x": 90,
+            "y": 180
+        },
+        "facing=up": {
+            "model": "ravensmodels:block/g3_connector"
+        },
+        "facing=west": {
+            "model": "ravensmodels:block/g3_connector",
+            "x": 90,
+            "y": 270
+        }
+    }
+}

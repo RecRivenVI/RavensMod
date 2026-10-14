@@ -1,0 +1,6 @@
+{
+    "parent": "ravensmodels:block/shattered_throne",
+    "loader": "ravensmodels:mesh",
+    "mesh": "shattered_throne",
+    "render_type": "minecraft:solid"
+}

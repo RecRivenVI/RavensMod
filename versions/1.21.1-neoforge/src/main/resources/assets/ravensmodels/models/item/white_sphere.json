@@ -1,0 +1,6 @@
+{
+    "parent": "ravensmodels:block/white_sphere",
+    "loader": "ravensmodels:mesh",
+    "mesh": "white_sphere",
+    "render_type": "minecraft:solid"
+}

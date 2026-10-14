@@ -1,0 +1,6 @@
+{
+    "parent": "ravensmodels:block/david_bust",
+    "loader": "ravensmodels:mesh",
+    "mesh": "david_bust",
+    "render_type": "minecraft:solid"
+}

@@ -13,4 +13,5 @@ rootProject.name = "RavensModels"
 
 targets {
     register("1.21.4-fabric")
+    register("1.21.1-neoforge")
 }

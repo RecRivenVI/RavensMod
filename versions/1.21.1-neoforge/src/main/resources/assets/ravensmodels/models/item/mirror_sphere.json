@@ -1,0 +1,6 @@
+{
+    "parent": "ravensmodels:block/mirror_sphere",
+    "loader": "ravensmodels:mesh",
+    "mesh": "mirror_sphere",
+    "render_type": "minecraft:solid"
+}

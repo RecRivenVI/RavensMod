@@ -1,0 +1,10 @@
+{
+    "loader": "ravensmodels:mesh",
+    "mesh": "white_sphere",
+    "render_type": "minecraft:solid",
+    "parent": "ravensmodels:block/cube_all_experiment",
+    "textures": {
+        "all": "ravensmodels:block/white_sphere_atlas",
+        "particle": "ravensmodels:block/white_sphere_atlas"
+    }
+}

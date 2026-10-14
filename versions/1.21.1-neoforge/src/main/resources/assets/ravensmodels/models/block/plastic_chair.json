@@ -1,0 +1,9 @@
+{
+    "loader": "ravensmodels:mesh",
+    "mesh": "plastic_chair",
+    "render_type": "minecraft:solid",
+    "parent": "ravensmodels:block/item_display_experiment",
+    "textures": {
+        "particle": "ravensmodels:block/plastic_chair_atlas"
+    }
+}

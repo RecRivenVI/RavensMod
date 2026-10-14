@@ -1,0 +1,6 @@
+{
+    "parent": "ravensmodels:block/g3_round_corner",
+    "loader": "ravensmodels:mesh",
+    "mesh": "g3_round_corner",
+    "render_type": "minecraft:solid"
+}

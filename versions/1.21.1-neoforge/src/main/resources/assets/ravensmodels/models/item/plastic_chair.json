@@ -1,0 +1,6 @@
+{
+    "parent": "ravensmodels:block/plastic_chair",
+    "loader": "ravensmodels:mesh",
+    "mesh": "plastic_chair",
+    "render_type": "minecraft:solid"
+}

@@ -1,12 +1,13 @@
 # Raven's Models
 
-Minecraft 1.21.4 Fabric 模型方块模组，内部项目名为 `RavensModels`，模组 ID 为 `ravensmodels`。提供镜面、石膏与塑料材质方块，以及球体、G3 圆角、连接板、王座、石膏头像、座椅和黑桃 A 静态展示模型。
+Minecraft 1.21.4 Fabric 与 1.21.1 NeoForge 模型方块模组，内部项目名为 `RavensModels`，模组 ID 为 `ravensmodels`。提供镜面、石膏与塑料材质方块，以及球体、G3 圆角、连接板、王座、石膏头像、座椅和黑桃 A 静态展示模型。
 
 ## Target
 
 | Target | 加载器版本 | Java |
 | --- | --- | --- |
 | `1.21.4-fabric` | Fabric 0.19.5 | 21 |
+| `1.21.1-neoforge` | NeoForge 21.1.257 | 21 |
 
 ## 快速开始
 
@@ -17,6 +18,8 @@ Minecraft 1.21.4 Fabric 模型方块模组，内部项目名为 `RavensModels`�
 .\gradlew.bat check verifyRelease
 .\gradlew.bat :version:1.21.4-fabric:runClient
 ```
+
+NeoForge 测试客户端使用 `.\gradlew.bat :version:1.21.1-neoforge:runClient`。
 
 模型姿态、材质与交互需要实际游戏验收。模型与纹理保留各自来源信息；本项目保留所有权利（All Rights Reserved），不授予使用或再分发许可，第三方授权声明见 `NOTICE` 和随资源保留的来源信息。
 

@@ -10,7 +10,7 @@
 | 模组 ID | `ravensmodels` |
 | Java 包 | `io.github.recrivenvi.ravensmodels` |
 | 入口类 | `RavensModels` |
-| 业务 | 注册模型方块与座椅交互，客户端使用 Fabric mesh 和 PBR 资源展示 |
+| 业务 | 注册模型方块与座椅交互，客户端使用 Fabric mesh 或 NeoForge 原生烘焙模型和 PBR 资源展示 |
 | 文档主语言 | 简体中文 |
 | 首页语言 | 简体中文 |
 | 参考 Target | `1.21.4-fabric` |
@@ -20,6 +20,7 @@
 | Target | 加载器版本 | Java |
 | --- | --- | --- |
 | `1.21.4-fabric` | 0.19.5 | 21 |
+| `1.21.1-neoforge` | 21.1.257 | 21 |
 
 ## 补充规则
 

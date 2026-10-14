@@ -1,0 +1,9 @@
+{
+    "loader": "ravensmodels:mesh",
+    "mesh": "ace_of_spades",
+    "render_type": "minecraft:cutout",
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "ravensmodels:item/ace_of_spades"
+    }
+}

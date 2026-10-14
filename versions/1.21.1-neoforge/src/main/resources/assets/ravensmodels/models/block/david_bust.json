@@ -1,0 +1,9 @@
+{
+    "loader": "ravensmodels:mesh",
+    "mesh": "david_bust",
+    "render_type": "minecraft:solid",
+    "parent": "ravensmodels:block/item_display_experiment",
+    "textures": {
+        "particle": "ravensmodels:block/david_bust_atlas"
+    }
+}

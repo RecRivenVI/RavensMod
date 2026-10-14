@@ -1,0 +1,6 @@
+{
+    "parent": "ravensmodels:block/dodecahedron",
+    "loader": "ravensmodels:mesh",
+    "mesh": "dodecahedron",
+    "render_type": "minecraft:solid"
+}

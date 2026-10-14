@@ -1,0 +1,12 @@
+{
+    "loader": "ravensmodels:mesh",
+    "mesh": "g3_round_corner",
+    "render_type": "minecraft:solid",
+    "parent": "ravensmodels:block/g3_item_display",
+    "textures": {
+        "bottom": "ravensmodels:block/g3_straight_atlas",
+        "top": "ravensmodels:block/g3_straight_atlas",
+        "side": "ravensmodels:block/g3_straight_atlas",
+        "particle": "ravensmodels:block/g3_straight_atlas"
+    }
+}
